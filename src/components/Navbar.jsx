@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const links = [
   { label: 'Home', path: '/' },
@@ -13,14 +13,20 @@ const links = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
 
   const closeMenu = () => setMenuOpen(false)
+
+  const handleNavigate = (path) => {
+    closeMenu()
+    navigate(path)
+  }
 
   return (
     <>
       <nav className="sticky top-0 z-50 border-b-[2.5px] border-crimson-700 bg-navy-700 shadow-nav">
         <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6 lg:px-10">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+          <Link to="/" className="flex shrink-0 items-center gap-2">
             <span className="text-base text-gold-500">★</span>
             <span className="font-display text-2xl font-black tracking-wide text-white">
               Vetess
@@ -33,17 +39,17 @@ export default function Navbar() {
 
               return (
                 <Link
-  key={link.path}
-  to={link.path}
-  className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-150 ${
-    isActive
-      ? 'bg-white/10 text-white'
-      : 'text-white hover:bg-white/10 hover:text-white'
-  }`}
-  style={{ color: '#ffffff' }}
->
-  {link.label}
-</Link>
+                  key={link.path}
+                  to={link.path}
+                  className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-150 ${
+                    isActive
+                      ? 'bg-white/10 text-white'
+                      : 'text-white hover:bg-white/10 hover:text-white'
+                  }`}
+                  style={{ color: '#ffffff' }}
+                >
+                  {link.label}
+                </Link>
               )
             })}
           </div>
@@ -51,6 +57,7 @@ export default function Navbar() {
           <div className="hidden items-center gap-3 lg:flex">
             <button
               type="button"
+              onClick={() => navigate('/admin/login')}
               className="rounded-md border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
             >
               Sign In
@@ -58,6 +65,7 @@ export default function Navbar() {
 
             <button
               type="button"
+              onClick={() => navigate('/for-veterans')}
               className="rounded-md bg-crimson-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-crimson-500"
             >
               Get Started Free
@@ -113,6 +121,7 @@ export default function Navbar() {
                       ? 'bg-white/10 text-white'
                       : 'text-white hover:bg-white/10'
                   }`}
+                  style={{ color: '#ffffff' }}
                 >
                   {link.label}
                 </Link>
@@ -122,6 +131,7 @@ export default function Navbar() {
             <div className="mt-6 flex flex-col gap-3">
               <button
                 type="button"
+                onClick={() => handleNavigate('/admin/login')}
                 className="w-full rounded-md border border-white/30 px-4 py-3 text-base font-medium text-white transition hover:bg-white/10"
               >
                 Sign In
@@ -129,6 +139,7 @@ export default function Navbar() {
 
               <button
                 type="button"
+                onClick={() => handleNavigate('/for-veterans')}
                 className="w-full rounded-md bg-crimson-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-crimson-500"
               >
                 Get Started Free
