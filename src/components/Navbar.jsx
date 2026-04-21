@@ -33,16 +33,17 @@ export default function Navbar() {
 
               return (
                 <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-150 ${
-                    isActive
-                      ? 'bg-white/10 text-white'
-                      : 'text-white hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {link.label}
-                </Link>
+  key={link.path}
+  to={link.path}
+  className={`rounded-md px-4 py-2 text-sm font-medium transition-all duration-150 ${
+    isActive
+      ? 'bg-white/10 text-white'
+      : 'text-white hover:bg-white/10 hover:text-white'
+  }`}
+  style={{ color: '#ffffff' }}
+>
+  {link.label}
+</Link>
               )
             })}
           </div>
