@@ -1,6 +1,13 @@
 export default function ForVeterans() {
   return (
+    
+            
+    
+    
     <section className="min-h-screen bg-[#f8f5f1] px-4 py-12 md:px-8">
+      
+       {/* hero section */}   
+
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#8b6f47]">
@@ -16,6 +23,9 @@ export default function ForVeterans() {
             support, better job preparation, and opportunities that actually make sense for you.
           </p>
         </div>
+
+            {/* here are the support pillars */}
+
 
         <div className="mb-16 grid gap-6 md:grid-cols-3">
           <article className="rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm">
@@ -48,6 +58,10 @@ export default function ForVeterans() {
             </p>
           </article>
         </div>
+    
+
+            {/* how it works section */}
+
 
         <div className="mb-16 rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm md:p-10">
           <div className="mb-8 text-center">
@@ -69,7 +83,7 @@ export default function ForVeterans() {
                 Start with your goals and what kind of support you’re looking for.
               </p>
             </div>
-
+        
             <div className="rounded-2xl bg-[#fcfbf8] p-5">
               <p className="mb-2 text-sm font-semibold text-[#8b6f47]">02</p>
               <h3 className="mb-2 text-lg font-semibold text-[#1f1f1f]">
@@ -92,6 +106,8 @@ export default function ForVeterans() {
           </div>
         </div>
 
+
+               {/* tried to make call to action section */}
         <div className="rounded-3xl border border-[#e7dfd4] bg-white p-8 text-center shadow-sm md:p-10">
           <h2 className="mb-4 text-3xl font-bold text-[#1f1f1f]">
             Ready to see what’s out there?
