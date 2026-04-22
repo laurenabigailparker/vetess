@@ -120,8 +120,9 @@ export default function ForVeterans() {
 
           <a
             href="/job-board"
-            className="inline-flex rounded-full bg-[#1f1f1f] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-full bg-[#9b7a46] px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
           >
+
             View Job Board
           </a>
         </div>
