@@ -18,8 +18,7 @@ export default function ForVeterans() {
           </h1>
 
           <p className="mx-auto mb-8 max-w-2xl text-sm leading-7 text-[#5f5f5f] md:text-base">
-            This is the beginning of the intake process and gives veterans a
-            simple way to share what they’re looking for.
+            share a few details to help us understand your goals and what kind of support you need.
           </p>
 
           {/* open modal button */}
