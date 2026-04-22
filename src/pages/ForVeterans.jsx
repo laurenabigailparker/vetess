@@ -1,14 +1,16 @@
 export default function ForVeterans() {
   return (
     
-            
-    
     
     <section className="min-h-screen bg-[#f8f5f1] px-4 py-12 md:px-8">
       
-       {/* hero section */}   
+       {/* my page container */}   
 
       <div className="mx-auto max-w-6xl">
+       
+       
+       {/* hero section */}
+       
         <div className="mb-16 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#8b6f47]">
             Support for Veterans
@@ -24,7 +26,7 @@ export default function ForVeterans() {
           </p>
         </div>
 
-            {/* here are the support pillars */}
+            {/* here are the support cards */}
 
 
         <div className="mb-16 grid gap-6 md:grid-cols-3">
@@ -105,7 +107,6 @@ export default function ForVeterans() {
             </div>
           </div>
         </div>
-
 
                {/* tried to make call to action section */}
         <div className="rounded-3xl border border-[#e7dfd4] bg-white p-8 text-center shadow-sm md:p-10">
