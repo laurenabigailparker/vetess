@@ -61,7 +61,7 @@ export default function VeteranIntakeModal({ isOpen, onClose }) {
               </label>
               <input
                 type="email"
-                placeholder="enter your email"
+                placeholder="Enter your email"
                 className="w-full rounded-2xl border border-[#e4d8c4] bg-[#faf8f3] px-4 py-3 text-sm text-[#1f1f1f] outline-none transition focus:border-[#9b7a46]"
               />
             </div>
