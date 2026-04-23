@@ -1,280 +1,245 @@
-import { useState } from "react";
-import VeteranIntakeModal from "../components/VeteranIntakeModal";
-
 export default function ForVeterans() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const serviceCards = [
+    {
+      icon: "📄",
+      title: "Resume Builder",
+      text: "AI-powered MOS translator converts military experience into civilian language employers understand.",
+      link: "/about",
+    },
+    {
+      icon: "📗",
+      title: "Career Coaching",
+      text: "One-on-one guidance from coaches who understand the unique challenges of military transition.",
+      link: "/about",
+    },
+    {
+      icon: "💼",
+      title: "Veteran Job Board",
+      text: "Exclusive access to employers actively seeking veteran talent with preference hiring programs.",
+      link: "/job-board",
+    },
+    {
+      icon: "🎤",
+      title: "Interview Prep",
+      text: "Mock interviews and feedback to help you translate service skills into compelling career stories.",
+      link: "/about",
+    },
+    {
+      icon: "🤝",
+      title: "Mentorship Network",
+      text: "Connect with veterans who have successfully made the transition and built civilian careers.",
+      link: "/about",
+    },
+    {
+      icon: "💰",
+      title: "Salary Coaching",
+      text: "Understand your market value and negotiate compensation that reflects your leadership.",
+      link: "/about",
+    },
+  ];
+
+  const successStories = [
+    {
+      text: "VetBridge coach translated 8 years as an Army Intelligence Officer into language civilian employers actually understood. Hired in 6 weeks.",
+      name: "Sgt. Marcus Reed (Ret.)",
+      sub: "US Army 8yr Infantry",
+      placed: "Placed: Cybersecurity Analyst @ Booz Allen Hamilton",
+      image:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      text: "As a military spouse who moved 4 times in 6 years, my resume was a disaster. VetBridge helped me build a career story, not just a job list. Dream job remote.",
+      name: "Jennifer Walsh",
+      sub: "Military Spouse, Navy Family",
+      placed: "Placed: HR Manager @ Dell Technologies",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      text: "Mock interviews were game-changing. Helped me stop answering like a Marine and start answering like a professional. Six-figure offer, 90 days.",
+      name: "Cpl. Devon Torres (Ret.)",
+      sub: "USMC 12yr Combat Logistics",
+      placed: "Placed: Operations Director @ FedEx",
+      image:
+        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=160&q=80",
+    },
+  ];
 
   return (
-    
-    
-    <section className="min-h-screen bg-[#f8f5f1] px-4 py-12 md:px-8">
-      
-       {/* my page container */}   
-
-      <div className="mx-auto max-w-6xl">
-       
-       
-       {/* hero section */}
-       
-        <div className="mb-16 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#8b6f47]">
-            Support for Veterans
-          </p>
-
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-[#1f1f1f] md:text-5xl">
-            Built to support your next step
+    <section className="min-h-screen bg-[#F2F2EF] px-4 py-8 sm:px-5 md:px-8 md:py-12">
+      <div className="mx-auto max-w-[1180px]">
+        {/* PAGE HERO */}
+        <div className="mb-8 text-center md:mb-10">
+          <h1
+            className="mx-auto max-w-[900px] text-[2.35rem] font-semibold leading-[0.95] tracking-[-0.03em] text-[#213059] sm:text-[3rem] md:text-[4.5rem]"
+            style={{
+              fontFamily:
+                '"Playfair Display", "Times New Roman", Georgia, serif',
+            }}
+          >
+            Services for Veterans
           </h1>
 
-          <p className="mx-auto max-w-2xl text-base leading-7 text-[#5f5f5f] md:text-lg">
-            Vetess is here to help you transition into civilian life with real
-            support, better job preparation, and opportunities that actually make sense for you.
-          </p>
-        </div>
-
-            {/* here are the support cards */}
-
-
-        <div className="mb-16 grid gap-6 md:grid-cols-3">
-          <article className="rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm">
-            <h2 className="mb-3 text-xl font-semibold text-[#1f1f1f]">
-              Transition Support
-            </h2>
-            <p className="text-sm leading-6 text-[#555]">
-              Moving out of the military can feel like a lot. This helps you understand
-              what comes next and how to navigate it without feeling lost.
-            </p>
-          </article>
-
-          <article className="rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm">
-            <h2 className="mb-3 text-xl font-semibold text-[#1f1f1f]">
-              Job Readiness
-            </h2>
-            <p className="text-sm leading-6 text-[#555]">
-              Get your resume right, understand what employers are looking for,
-              and feel more confident going into interviews.
-            </p>
-          </article>
-
-          <article className="rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm">
-            <h2 className="mb-3 text-xl font-semibold text-[#1f1f1f]">
-              Career Growth
-            </h2>
-            <p className="text-sm leading-6 text-[#555]">
-              This isn’t just about getting a job. It’s about building something long-term
-              that actually works for your life.
-            </p>
-          </article>
-        </div>
-    
-
-            {/* how it works section */}
-
-
-        <div className="mb-16 rounded-3xl border border-[#e7dfd4] bg-white p-6 shadow-sm md:p-10">
-          <div className="mb-8 text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#8b6f47]">
-              How it works
-            </p>
-            <h2 className="text-3xl font-bold text-[#1f1f1f]">
-              Simple steps to get started
-            </h2>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl bg-[#fcfbf8] p-5">
-              <p className="mb-2 text-sm font-semibold text-[#8b6f47]">01</p>
-              <h3 className="mb-2 text-lg font-semibold text-[#1f1f1f]">
-                Tell us what you need
-              </h3>
-              <p className="text-sm leading-6 text-[#555]">
-                Start with your goals and what kind of support you’re looking for.
-              </p>
-            </div>
-        
-            <div className="rounded-2xl bg-[#fcfbf8] p-5">
-              <p className="mb-2 text-sm font-semibold text-[#8b6f47]">02</p>
-              <h3 className="mb-2 text-lg font-semibold text-[#1f1f1f]">
-                Explore your options
-              </h3>
-              <p className="text-sm leading-6 text-[#555]">
-                Look through opportunities and resources that actually fit your background.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-[#fcfbf8] p-5">
-              <p className="mb-2 text-sm font-semibold text-[#8b6f47]">03</p>
-              <h3 className="mb-2 text-lg font-semibold text-[#1f1f1f]">
-                Take the next step
-              </h3>
-              <p className="text-sm leading-6 text-[#555]">
-                Move forward with more direction and confidence in what you’re doing.
-              </p>
-            </div>
-          </div>
-        </div>
-
-               {/* tried to make call to action section */}
-        <div className="rounded-3xl border border-[#e7dfd4] bg-white p-8 text-center shadow-sm md:p-10">
-          <h2 className="mb-4 text-3xl font-bold text-[#1f1f1f]">
-            Ready to see what’s out there?
-          </h2>
-
-          <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-[#555] md:text-base">
-            Check out available opportunities and start figuring out what your next move looks like.
-          </p>
-
-          <a
-            href="/job-board"
-            className="inline-flex items-center justify-center rounded-full bg-[#9b7a46] px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
+          <p
+            className="mx-auto mt-4 max-w-[640px] text-[15px] leading-8 text-[#6F6969] md:mt-5 md:text-[17px]"
+            style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
           >
-
-            View Job Board
-          </a>
+            Comprehensive support designed specifically for veterans and military
+            families transitioning to civilian careers.
+          </p>
         </div>
-      </div>
-    <div className="mx-auto max-w-[1200px] px-5 py-12 md:py-20 md:px-10">
-      <div className="flex flex-col items-center">
-        <h1 className="font-display text-3xl md:text-5xl font-black text-navy-700 text-center leading-tight">
-          Services for Veterans
-        </h1>
 
-        <p className="mt-4 text-base md:text-lg text-ink-body text-center max-w-2xl">
-          Comprehensive support designed specifically for veterans and military
-          families transitioning to civilian careers.
-        </p>
-
-        {/* CTA Button */}
-        <div className="flex justify-center w-full md:w-auto">
-          <a
-            href="/job-board"
-            className="mt-8 md:mt-10 w-full md:w-auto text-center inline-block rounded-md bg-crimson-700 px-10 py-4 text-sm font-semibold !text-white transition-all hover:bg-crimson-500 active:scale-95 shadow-md"
-    <section className="bg-[#f7f4ef] px-4 py-16 md:px-8">
-      <div className="mx-auto max-w-6xl">
-        {/* page intro / action trigger */}
-        <div className="text-center">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#9a6b4a]">
-            Veteran Intake
-          </p>
-
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-[#1f2f6b] md:text-6xl">
-            Start Your Next Step with Vetess
-          </h1>
-
-          <p className="mx-auto mb-8 max-w-2xl text-sm leading-7 text-[#5f5f5f] md:text-base">
-            Share a few details to help us understand your goals and what kind of support you need.
-          </p>
-
-          {/* open modal button */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center rounded-full bg-[#9b7a46] px-6 py-3 text-sm font-medium text-white transition hover:opacity-90"
-          >
-            Start Intake Form
-          </button>
-
-        {/* hero section (already built by jacob) */}
-        {/* this is the top intro area with the main heading and text.
-            i didn’t touch this since it was already assigned */}
-
-        {/* services / next steps section */}
-        {/* this section follows the figma design.
-            even though it says "our services", it also works as
-            a way to guide the user on what they can do next */}
-
-        <div className="rounded-[1.5rem] bg-[#f3eee3] px-6 py-14 md:px-10">
-
-          {/* section header */}
-          {/* this is just the label, main title, and short description.
-              kept it centered and spaced out to match the figma */}
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#9a6b4a]">
-              OUR SERVICES
+        {/* SERVICES SECTION */}
+        <section className="mb-10 rounded-[8px] border border-[#ECE7D8] bg-[#FAFAF8] px-5 py-8 sm:px-7 md:mb-12 md:px-8 md:py-12">
+          <div className="mx-auto mb-8 max-w-[760px] text-center md:mb-10">
+            <p
+              className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]"
+              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+            >
+              Our Services
             </p>
 
-            <h2 className="mb-4 text-3xl font-bold leading-tight text-[#1f2f6b] md:text-5xl">
+            <h2
+              className="mx-auto max-w-[860px] text-[2rem] font-semibold leading-[1.05] tracking-[-0.03em] text-[#213059] sm:text-[2.6rem] md:text-[3.65rem]"
+              style={{
+                fontFamily:
+                  '"Playfair Display", "Times New Roman", Georgia, serif',
+              }}
+            >
               Everything You Need to Land Your Next Role
             </h2>
 
-            <p className="mx-auto max-w-2xl text-sm leading-7 text-[#6a6a6a] md:text-base">
-              Comprehensive support designed to guide veterans, active duty,
-              and military families toward the right resources.
+            <p
+              className="mx-auto mt-4 max-w-[620px] text-[15px] leading-8 text-[#7A7471] md:text-[17px]"
+              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+            >
+              Comprehensive support designed specifically for veterans, active
+              duty, and military families.
             </p>
           </div>
 
-          {/* cards section */}
-          {/* using a grid so everything lines up evenly and stacks on mobile */}
-          <div className="grid gap-6 md:grid-cols-3">
-
-            {/* card 1 - job board */}
-            {/* this lets users go look at open jobs */}
-            <article className="rounded-[1.25rem] border border-[#e4d8c4] bg-white p-6 shadow-sm">
-              <h3 className="mb-3 text-2xl font-semibold text-[#1f2f6b]">
-                Explore Opportunities
-              </h3>
-
-              <p className="mb-6 text-sm leading-7 text-[#555]">
-                Browse open roles and see what opportunities line up with your goals,
-                experience, and next move.
-              </p>
-
-              <a
-                href="/job-board"
-                className="inline-flex rounded-full bg-[#9b7a46] px-5 py-2.5 text-sm font-medium text-white"
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {serviceCards.map((card) => (
+              <article
+                key={card.title}
+                className="rounded-[18px] border border-[#E6DCC5] bg-[#FBFBF9] px-5 py-5 shadow-[0_4px_16px_rgba(27,25,25,0.04)] transition duration-200 hover:-translate-y-[1px]"
               >
-                View Job Board
-              </a>
-            </article>
+                <div className="mb-5 flex h-[42px] w-[42px] items-center justify-center rounded-[12px] bg-[#EEF0F5] text-[17px]">
+                  {card.icon}
+                </div>
 
-            {/* card 2 - about */}
-            {/* this is for learning more about the platform */}
-            <article className="rounded-[1.25rem] border border-[#e4d8c4] bg-white p-6 shadow-sm">
-              <h3 className="mb-3 text-2xl font-semibold text-[#1f2f6b]">
-                Learn More About Vetess
-              </h3>
+                <h3
+                  className="mb-3 text-[1.85rem] font-semibold leading-[1.05] tracking-[-0.02em] text-[#213059]"
+                  style={{
+                    fontFamily:
+                      '"Playfair Display", "Times New Roman", Georgia, serif',
+                  }}
+                >
+                  {card.title}
+                </h3>
 
-              <p className="mb-6 text-sm leading-7 text-[#555]">
-                Get a better understanding of the mission behind the platform
-                and how it is built to support veterans.
-              </p>
+                <p
+                  className="mb-5 max-w-[280px] text-[15px] leading-8 text-[#4D4A4A]"
+                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                >
+                  {card.text}
+                </p>
 
-              <a
-                href="/about"
-                className="inline-flex rounded-full border border-[#9b7a46] px-5 py-2.5 text-sm font-medium text-[#5a4a2f]"
-              >
-                Learn More
-              </a>
-            </article>
-
-            {/* card 3 - donate */}
-            {/* this lets users support the mission */}
-            <article className="rounded-[1.25rem] border border-[#e4d8c4] bg-white p-6 shadow-sm">
-              <h3 className="mb-3 text-2xl font-semibold text-[#1f2f6b]">
-                Support the Mission
-              </h3>
-
-              <p className="mb-6 text-sm leading-7 text-[#555]">
-                Help support the work being done to connect veterans with better
-                opportunities, guidance, and resources.
-              </p>
-
-              <a
-                href="/donate"
-                className="inline-flex rounded-full bg-[#9b7a46] px-5 py-2.5 text-sm font-medium text-white"
-              >
-                Donate
-              </a>
-            </article>
-
+                <a
+                  href={card.link}
+                  className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#213059] transition hover:opacity-80"
+                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                >
+                  Learn more <span aria-hidden="true">→</span>
+                </a>
+              </article>
+            ))}
           </div>
-        </div>
+        </section>
 
+        {/* SUCCESS STORIES */}
+        <section className="rounded-[4px] bg-[#EEE9DD] px-5 py-10 sm:px-7 md:px-8 md:py-14">
+          <div className="mx-auto mb-8 max-w-[760px] text-center md:mb-10">
+            <p
+              className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]"
+              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+            >
+              Success Stories
+            </p>
+
+            <h2
+              className="mx-auto max-w-[900px] text-[2.05rem] font-semibold leading-[1.05] tracking-[-0.03em] text-[#213059] sm:text-[2.75rem] md:text-[3.75rem]"
+              style={{
+                fontFamily:
+                  '"Playfair Display", "Times New Roman", Georgia, serif',
+              }}
+            >
+              Veterans Who Found Their Path
+            </h2>
+
+            <p
+              className="mx-auto mt-4 max-w-[650px] text-[15px] leading-8 text-[#7C7470] md:text-[17px]"
+              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+            >
+              Real stories from service members who successfully transitioned to
+              civilian careers.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {successStories.map((story) => (
+              <article
+                key={story.name}
+                className="rounded-[18px] border border-[#E6DCCB] bg-white px-5 py-5 shadow-[0_6px_18px_rgba(27,25,25,0.05)]"
+              >
+                <p className="mb-5 text-[14px] tracking-[0.28em] text-[#CCB12B]">
+                  ★★★★★
+                </p>
+
+                <p
+                  className="min-h-[170px] text-[15px] leading-8 text-[#2F2E2E] md:min-h-[182px]"
+                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                >
+                  {story.text}
+                </p>
+
+                <div className="mt-6 border-t border-[#E9E0D4] pt-5">
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={story.image}
+                      alt={story.name}
+                      className="h-12 w-12 shrink-0 rounded-full object-cover"
+                    />
+
+                    <div className="min-w-0">
+                      <p
+                        className="text-[15px] font-bold leading-5 text-[#1F2023]"
+                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                      >
+                        {story.name}
+                      </p>
+
+                      <p
+                        className="mt-1 text-[12px] leading-4 text-[#7A746E]"
+                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                      >
+                        {story.sub}
+                      </p>
+
+                      <p
+                        className="mt-2 text-[12px] leading-5 text-[#A28625]"
+                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
+                      >
+                        {story.placed}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
-
-      {/* intake modal */}
-      <VeteranIntakeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </section>
   );
 }
