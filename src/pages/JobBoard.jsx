@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import JobCard from "../components/JobCard";
 
-
 /* fake jobs for now so the page feels full + real */
 const jobs = [
   {
@@ -240,16 +239,16 @@ export default function JobBoard() {
               Veteran Job Board
             </p>
 
-           <h1
-  className="w-full text-[36px] sm:text-[48px] lg:text-[56px] leading-[1.04] text-[#1f2f63]"
-  style={{
-    fontFamily: '"Playfair Display", serif',
-    fontWeight: 700,
-    letterSpacing: "-0.015em",
-  }}
->
-  Find Jobs That Value Your Service
-</h1>
+            <h1
+              className="w-full text-[36px] leading-[1.04] text-[#1f2f63] sm:text-[48px] lg:text-[56px]"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: 700,
+                letterSpacing: "-0.015em",
+              }}
+            >
+              Find Jobs That Value Your Service
+            </h1>
 
             <p className="mt-4 text-[15px] font-normal leading-6 text-[#7b746c] sm:text-[16px]">
               2,447 openings from employers committed to hiring veterans ·
@@ -282,7 +281,7 @@ export default function JobBoard() {
                 </div>
 
                 <button
-                  className="min-h-[72px] flex items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
+                  className="flex min-h-[72px] items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
                   style={{
                     fontFamily: '"DM Sans", sans-serif',
                     fontWeight: 600,
@@ -342,70 +341,69 @@ export default function JobBoard() {
             </div>
           </div>
 
-
-{/* map view */}
-{activeView === "map" && (
-  <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
-    <div className="overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-[#f3eee4] shadow-sm">
-      <div className="relative h-[420px] w-full bg-[#dbe8ec] sm:h-[500px]">
-        <iframe
-          title="United States Job Map"
-          src="https://www.google.com/maps?q=United%20States&z=4&output=embed"
-          className="h-full w-full border-0"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </div>
-    </div>
-
-    {/* tan container */}
-    <div className="mt-5 rounded-[20px] border border-[#ebe3d7] bg-[#f7f1e7] p-5 shadow-[0_1px_4px_rgba(70,52,24,0.03)] sm:p-6">
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {mapCities.map((item) => (
-          <div
-            key={item.id}
-            className="rounded-[16px] border border-[#e7dfd2] bg-[#fbf9f4] px-4 py-3 shadow-[0_2px_6px_rgba(27,31,59,0.05)] transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_6px_14px_rgba(27,31,59,0.08)] hover:border-[#ded6c8]"
-          >
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <h3
-                  className="text-[15px] text-[#2a3560]"
-                  style={{
-                    fontFamily: '"DM Sans", sans-serif',
-                    fontWeight: 700,
-                  }}
-                >
-                  {item.city}
-                </h3>
-                <p
-                  className="mt-1 text-[14px] text-[#7a756e]"
-                  style={{
-                    fontFamily: '"DM Sans", sans-serif',
-                    fontWeight: 400,
-                  }}
-                >
-                  {item.count} open positions
-                </p>
+          {/* map view */}
+          {activeView === "map" && (
+            <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
+              <div className="overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-[#f3eee4] shadow-sm">
+                <div className="relative h-[420px] w-full bg-[#dbe8ec] sm:h-[500px]">
+                  <iframe
+                    title="United States Job Map"
+                    src="https://www.google.com/maps?q=United%20States&z=4&output=embed"
+                    className="h-full w-full border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
               </div>
 
-              <span className="text-sm text-[#9f1d20]">📍</span>
-            </div>
+              {/* tan container */}
+              <div className="mt-5 rounded-[20px] border border-[#ebe3d7] bg-[#f7f1e7] p-5 shadow-[0_1px_4px_rgba(70,52,24,0.03)] sm:p-6">
+                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                  {mapCities.map((item) => (
+                    <div
+                      key={item.id}
+                      className="rounded-[16px] border border-[#e7dfd2] bg-[#fbf9f4] px-4 py-3 shadow-[0_2px_6px_rgba(27,31,59,0.05)] transition-all duration-200 ease-out hover:-translate-y-[2px] hover:border-[#ded6c8] hover:shadow-[0_6px_14px_rgba(27,31,59,0.08)]"
+                    >
+                      <div className="mb-4 flex items-start justify-between gap-3">
+                        <div>
+                          <h3
+                            className="text-[15px] text-[#2a3560]"
+                            style={{
+                              fontFamily: '"DM Sans", sans-serif',
+                              fontWeight: 700,
+                            }}
+                          >
+                            {item.city}
+                          </h3>
+                          <p
+                            className="mt-1 text-[14px] text-[#7a756e]"
+                            style={{
+                              fontFamily: '"DM Sans", sans-serif',
+                              fontWeight: 400,
+                            }}
+                          >
+                            {item.count} open positions
+                          </p>
+                        </div>
 
-            <button
-              className="w-full rounded-[10px] bg-[#f7f3ea] px-4 py-2 text-[14px] text-[#2f3e6a] transition-all duration-200 ease-out hover:bg-[#efe8dd]"
-              style={{
-                fontFamily: '"DM Sans", sans-serif',
-                fontWeight: 700,
-              }}
-            >
-              View Jobs
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)}
+                        <span className="text-sm text-[#9f1d20]">📍</span>
+                      </div>
+
+                      <button
+                        className="w-full rounded-[10px] bg-[#f7f3ea] px-4 py-2 text-[14px] text-[#2f3e6a] transition-all duration-200 ease-out hover:bg-[#efe8dd]"
+                        style={{
+                          fontFamily: '"DM Sans", sans-serif',
+                          fontWeight: 700,
+                        }}
+                      >
+                        View Jobs
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* list view */}
           {activeView === "list" && (
