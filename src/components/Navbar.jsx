@@ -7,6 +7,7 @@ const links = [
   { label: 'For Veterans', path: '/for-veterans' },
   { label: 'For Employers', path: '/for-employers' },
   { label: 'About', path: '/about' },
+  { label: 'Contact', path: '/contact' },
   { label: 'Donate', path: '/donate' },
 ]
 
@@ -25,7 +26,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="sticky top-0 z-50 border-b-[2.5px] border-crimson-700 bg-navy-700 shadow-nav">
-        <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6 xl:px-10">
           <Link to="/" className="flex shrink-0 items-center gap-2">
             <span className="text-base text-gold-500">★</span>
             <span className="font-display text-2xl font-black tracking-wide text-white">
@@ -33,7 +34,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-center gap-1 xl:flex">
             {links.map((link) => {
               const isActive = location.pathname === link.path
 
@@ -54,7 +55,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-3 xl:flex">
             <button
               type="button"
               onClick={() => navigate('/admin/login')}
@@ -75,7 +76,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-md border border-white/20 text-white transition hover:bg-white/10 lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-md border border-white/20 text-white transition hover:bg-white/10 xl:hidden"
             aria-label="Toggle menu"
           >
             {menuOpen ? (
@@ -88,7 +89,7 @@ export default function Navbar() {
       </nav>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-[60] bg-navy-900 lg:hidden">
+        <div className="fixed inset-0 z-[60] bg-navy-900 xl:hidden">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-2">
               <span className="text-base text-gold-500">★</span>

@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Donate from "./pages/Donate";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminHome from "./pages/admin/AdminHome";
+import Contact from "./pages/Contact";
 import {
   AdminDashboardPage,
   AdminDonationsPage,
@@ -37,9 +38,11 @@ export default function App() {
           <Route path="/for-veterans" element={<ForVeterans />} />
           <Route path="/for-employers" element={<ForEmployers />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminHome />}>
+          
             <Route index element={<AdminDashboardPage />} />
             <Route path="donations" element={<AdminDonationsPage />} />
             <Route path="donors" element={<AdminDonorsPage />} />
@@ -57,7 +60,7 @@ export default function App() {
         </Routes>
       </main>
 
-      <Footer />
+      {!hideNavbar && <Footer />}
     </div>
   );
 }
