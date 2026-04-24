@@ -356,7 +356,6 @@ export default function JobBoard() {
                 </div>
               </div>
 
-              {/* tan container */}
               <div className="mt-5 rounded-[20px] border border-[#ebe3d7] bg-[#f7f1e7] p-5 shadow-[0_1px_4px_rgba(70,52,24,0.03)] sm:p-6">
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                   {mapCities.map((item) => (
