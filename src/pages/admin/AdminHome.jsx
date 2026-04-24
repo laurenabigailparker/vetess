@@ -5,7 +5,7 @@ export default function AdminHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#eef3f8] font-sans text-slate-900">
+    <div className="min-h-screen bg-[#FEFCF8] font-sans text-slate-900">
       <header className="fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between bg-[#142b56] border-b-2 border-[#911b1d] px-6 text-white shadow-[0_16px_40px_rgba(8,18,51,0.18)]">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -211,7 +211,7 @@ export default function AdminHome() {
             </nav>
           </aside>
 
-          <main className="flex-1 bg-[#eef3f8] p-6">
+          <main className="flex-1 bg-[#FEFCF8] p-6">
             <Outlet />
           </main>
         </div>
