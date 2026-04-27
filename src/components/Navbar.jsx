@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import VeteranIntakeModal from '../components/VeteranIntakeModal'
 
 const links = [
   { label: 'Home', path: '/' },
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -66,11 +68,16 @@ export default function Navbar() {
 
             <button
               type="button"
-              onClick={() => navigate('/for-veterans')}
+              onClick={() => setIsModalOpen(true)}
               className="rounded-md bg-crimson-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-crimson-500"
             >
               Get Started Free
             </button>
+            <VeteranIntakeModal 
+              isOpen={isModalOpen} 
+              onClose={() => setIsModalOpen(false)}
+              />
+            
           </div>
 
           <button
@@ -140,11 +147,16 @@ export default function Navbar() {
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/for-veterans')}
+                onClick={() => setIsModalOpen(true)}
                 className="w-full rounded-md bg-crimson-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-crimson-500"
               >
                 Get Started Free
               </button>
+
+              <VeteranIntakeModal 
+              isOpen={isModalOpen} 
+              onClose={() => setIsModalOpen(false)}
+              />
             </div>
           </div>
         </div>

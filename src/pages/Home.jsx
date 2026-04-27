@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import VeteranIntakeModal from '../components/VeteranIntakeModal'
 
 const stats = [
   { value: 47000, suffix: '+', label: 'Veterans Placed' },
@@ -110,6 +111,7 @@ export default function Home() {
   const navigate = useNavigate()
   const statsRef = useRef(null)
   const [startStats, setStartStats] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const node = statsRef.current
@@ -156,11 +158,16 @@ export default function Home() {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-8">
               <button
                 type="button"
-                onClick={() => navigate('/for-veterans')}
+                onClick={() => setIsModalOpen(true)}
                 className="w-full rounded-md bg-crimson-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-crimson-500 sm:w-auto"
               >
                 Get Started Free
               </button>
+
+                <VeteranIntakeModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)}
+                />
 
               <button
                 type="button"
