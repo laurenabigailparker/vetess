@@ -68,6 +68,7 @@ export default function ForVeterans() {
   return (
     <section className="min-h-screen bg-[#F2F2EF] px-4 py-8 sm:px-5 md:px-8 md:py-12">
       <div className="mx-auto max-w-[1180px]">
+
         {/* PAGE HERO */}
         <div className="mb-8 text-center md:mb-10">
           <h1
@@ -89,30 +90,18 @@ export default function ForVeterans() {
           </p>
         </div>
 
-        {/* SERVICES SECTION */}
+        {/* SERVICES */}
         <section className="mb-10 rounded-[8px] border border-[#ECE7D8] bg-[#FAFAF8] px-5 py-8 sm:px-7 md:mb-12 md:px-8 md:py-12">
           <div className="mx-auto mb-8 max-w-[760px] text-center md:mb-10">
-            <p
-              className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]"
-              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-            >
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]">
               Our Services
             </p>
 
-            <h2
-              className="mx-auto max-w-[860px] text-[2rem] font-semibold leading-[1.05] tracking-[-0.03em] text-[#213059] sm:text-[2.6rem] md:text-[3.65rem]"
-              style={{
-                fontFamily:
-                  '"Playfair Display", "Times New Roman", Georgia, serif',
-              }}
-            >
+            <h2 className="mx-auto max-w-[860px] text-[2rem] font-semibold text-[#213059] sm:text-[2.6rem] md:text-[3.65rem]">
               Everything You Need to Land Your Next Role
             </h2>
 
-            <p
-              className="mx-auto mt-4 max-w-[620px] text-[15px] leading-8 text-[#7A7471] md:text-[17px]"
-              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-            >
+            <p className="mx-auto mt-4 max-w-[620px] text-[15px] text-[#7A7471] md:text-[17px]">
               Comprehensive support designed specifically for veterans, active
               duty, and military families.
             </p>
@@ -120,37 +109,14 @@ export default function ForVeterans() {
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {serviceCards.map((card) => (
-              <article
-                key={card.title}
-                className="rounded-[18px] border border-[#E6DCC5] bg-[#FBFBF9] px-5 py-5 shadow-[0_4px_16px_rgba(27,25,25,0.04)] transition duration-200 hover:-translate-y-[1px]"
-              >
-                <div className="mb-5 flex h-[42px] w-[42px] items-center justify-center rounded-[12px] bg-[#EEF0F5] text-[17px]">
-                  {card.icon}
-                </div>
-
-                <h3
-                  className="mb-3 text-[1.85rem] font-semibold leading-[1.05] tracking-[-0.02em] text-[#213059]"
-                  style={{
-                    fontFamily:
-                      '"Playfair Display", "Times New Roman", Georgia, serif',
-                  }}
-                >
+              <article key={card.title} className="rounded-[18px] border bg-[#FBFBF9] px-5 py-5">
+                <div className="mb-5">{card.icon}</div>
+                <h3 className="mb-3 text-[1.85rem] font-semibold text-[#213059]">
                   {card.title}
                 </h3>
-
-                <p
-                  className="mb-5 max-w-[280px] text-[15px] leading-8 text-[#4D4A4A]"
-                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                >
-                  {card.text}
-                </p>
-
-                <a
-                  href={card.link}
-                  className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#213059] transition hover:opacity-80"
-                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                >
-                  Learn more <span aria-hidden="true">→</span>
+                <p className="mb-5 text-[15px] text-[#4D4A4A]">{card.text}</p>
+                <a href={card.link} className="text-[14px] font-semibold text-[#213059]">
+                  Learn more →
                 </a>
               </article>
             ))}
@@ -160,27 +126,15 @@ export default function ForVeterans() {
         {/* SUCCESS STORIES */}
         <section className="rounded-[4px] bg-[#EEE9DD] px-5 py-10 sm:px-7 md:px-8 md:py-14">
           <div className="mx-auto mb-8 max-w-[760px] text-center md:mb-10">
-            <p
-              className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]"
-              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-            >
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A12E43]">
               Success Stories
             </p>
 
-            <h2
-              className="mx-auto max-w-[900px] text-[2.05rem] font-semibold leading-[1.05] tracking-[-0.03em] text-[#213059] sm:text-[2.75rem] md:text-[3.75rem]"
-              style={{
-                fontFamily:
-                  '"Playfair Display", "Times New Roman", Georgia, serif',
-              }}
-            >
+            <h2 className="mx-auto max-w-[900px] text-[2.05rem] font-semibold text-[#213059] sm:text-[2.75rem] md:text-[3.75rem]">
               Veterans Who Found Their Path
             </h2>
 
-            <p
-              className="mx-auto mt-4 max-w-[650px] text-[15px] leading-8 text-[#7C7470] md:text-[17px]"
-              style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-            >
+            <p className="mx-auto mt-4 max-w-[650px] text-[15px] text-[#7C7470] md:text-[17px]">
               Real stories from service members who successfully transitioned to
               civilian careers.
             </p>
@@ -188,50 +142,17 @@ export default function ForVeterans() {
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {successStories.map((story) => (
-              <article
-                key={story.name}
-                className="rounded-[18px] border border-[#E6DCCB] bg-white px-5 py-5 shadow-[0_6px_18px_rgba(27,25,25,0.05)]"
-              >
-                <p className="mb-5 text-[14px] tracking-[0.28em] text-[#CCB12B]">
-                  ★★★★★
-                </p>
+              <article key={story.name} className="rounded-[18px] border bg-white px-5 py-5">
+                <p className="mb-5 text-[#CCB12B]">★★★★★</p>
+                <p className="text-[15px] text-[#2F2E2E]">{story.text}</p>
 
-                <p
-                  className="min-h-[170px] text-[15px] leading-8 text-[#2F2E2E] md:min-h-[182px]"
-                  style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                >
-                  {story.text}
-                </p>
-
-                <div className="mt-6 border-t border-[#E9E0D4] pt-5">
-                  <div className="flex items-start gap-3">
-                    <img
-                      src={story.image}
-                      alt={story.name}
-                      className="h-12 w-12 shrink-0 rounded-full object-cover"
-                    />
-
-                    <div className="min-w-0">
-                      <p
-                        className="text-[15px] font-bold leading-5 text-[#1F2023]"
-                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                      >
-                        {story.name}
-                      </p>
-
-                      <p
-                        className="mt-1 text-[12px] leading-4 text-[#7A746E]"
-                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                      >
-                        {story.sub}
-                      </p>
-
-                      <p
-                        className="mt-2 text-[12px] leading-5 text-[#A28625]"
-                        style={{ fontFamily: '"DM Sans", Arial, sans-serif' }}
-                      >
-                        {story.placed}
-                      </p>
+                <div className="mt-6 border-t pt-5">
+                  <div className="flex gap-3">
+                    <img src={story.image} alt={story.name} className="h-12 w-12 rounded-full" />
+                    <div>
+                      <p className="font-bold">{story.name}</p>
+                      <p className="text-[12px] text-[#7A746E]">{story.sub}</p>
+                      <p className="text-[12px] text-[#A28625]">{story.placed}</p>
                     </div>
                   </div>
                 </div>
@@ -239,6 +160,7 @@ export default function ForVeterans() {
             ))}
           </div>
         </section>
+
       </div>
     </section>
   );

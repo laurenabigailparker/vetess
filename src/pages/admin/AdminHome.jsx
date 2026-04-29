@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
 
 export default function AdminHome() {
   const navigate = useNavigate();
+  const [submissionCount, setSubmissionCount] = useState(0);
+
+  // function first
+  const fetchSubmissionCount = async () => {
+    const { count, error } = await supabase
+      .from("submissions")
+      .select("*", { count: "exact", head: true });
+
+    if (error) {
+      console.log("ERROR:", error);
+      return;
+    }
+
+    setSubmissionCount(count || 0);
+  };
+
+  // using it here
+  useEffect(() => {
+    fetchSubmissionCount();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FEFCF8] font-sans text-slate-900">
@@ -20,16 +41,24 @@ export default function AdminHome() {
               ADMIN
             </span>
           </div>
+
           <div className="h-6 w-px bg-white/15" />
+
           <p className="text-sm uppercase tracking-[0.22em] text-[#b9c7f8]">
             Dashboard
           </p>
+
+          {/* live data */}
+          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+            Submissions: {submissionCount}
+          </span>
         </div>
 
         <div className="flex items-center gap-4">
           <button className="hidden rounded-2xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:bg-white/10 sm:inline-flex">
             🔔
           </button>
+
           <button
             type="button"
             onClick={() => navigate("/")}
@@ -48,6 +77,7 @@ export default function AdminHome() {
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
                   Overview
                 </p>
+
                 <NavLink
                   to=""
                   end
@@ -63,10 +93,27 @@ export default function AdminHome() {
                 </NavLink>
               </div>
 
+              {/* backend section */}
+              <div>
+                <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
+                  Backend
+                </p>
+
+                <div className="rounded-3xl bg-white/5 px-4 py-3 text-slate-200">
+                  <p className="text-xs uppercase tracking-[0.2em] text-[gold]">
+                    Supabase
+                  </p>
+                  <p className="mt-1 text-sm">
+                    {submissionCount} test submissions
+                  </p>
+                </div>
+              </div>
+
               <div>
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
                   Donations
                 </p>
+
                 <div className="space-y-1">
                   <NavLink
                     to="donations"
@@ -83,6 +130,7 @@ export default function AdminHome() {
                       12
                     </span>
                   </NavLink>
+
                   <NavLink
                     to="donors"
                     className={({ isActive }) =>
@@ -102,6 +150,7 @@ export default function AdminHome() {
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
                   Job Board
                 </p>
+
                 <div className="space-y-1">
                   <NavLink
                     to="map-pins"
@@ -115,6 +164,7 @@ export default function AdminHome() {
                   >
                     Map Pins
                   </NavLink>
+
                   <NavLink
                     to="job-listings"
                     className={({ isActive }) =>
@@ -137,6 +187,7 @@ export default function AdminHome() {
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
                   Content
                 </p>
+
                 <div className="space-y-1">
                   <NavLink
                     to="testimonials"
@@ -150,6 +201,7 @@ export default function AdminHome() {
                   >
                     Testimonials
                   </NavLink>
+
                   <NavLink
                     to="success-stories"
                     className={({ isActive }) =>
@@ -162,6 +214,7 @@ export default function AdminHome() {
                   >
                     Success Stories
                   </NavLink>
+
                   <NavLink
                     to="pages-content"
                     className={({ isActive }) =>
@@ -181,6 +234,7 @@ export default function AdminHome() {
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
                   Admin
                 </p>
+
                 <div className="space-y-1">
                   <NavLink
                     to="admin-users"
@@ -194,6 +248,7 @@ export default function AdminHome() {
                   >
                     Admin Users
                   </NavLink>
+
                   <NavLink
                     to="settings"
                     className={({ isActive }) =>
