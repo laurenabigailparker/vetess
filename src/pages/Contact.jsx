@@ -1,7 +1,55 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+import { useState } from "react";
 
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => 
+      
+      ({ ...prev, [name]: value }));
+  };
+
+  const submittoSupabase = async (e) => {
+    try {
+      const { data, error } = await supabase.from("submissions").insert([
+        firstName: '${data.firstName}', ${data.lastName}',
+        email: data.email,
+        phone: data.phone,
+        subject: data.subject,
+        message: data.message,
+      ]);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        return {sucess: false};
+
+      } 
+      
+      return {success: true};
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      return {success: false};
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    /*
+     await submittoSupabase(formData); 
+     */
+
   return (
     <main className="min-h-screen bg-[#FAF7F1] text-[#14224A]">
       <section className="bg-[#243866] px-6 py-24 text-center text-white">
@@ -76,17 +124,17 @@ export default function Contact() {
 
           <form className="mt-8 space-y-5">
             <div className="grid gap-5 md:grid-cols-2">
-              <FormField label="First Name *" placeholder="John" />
-              <FormField label="Last Name *" placeholder="Smith" />
+              <FormField label="First Name *" placeholder="John" name="FirstName" />
+              <FormField label="Last Name *" placeholder="Smith" name="LastName" />
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              <FormField label="Email *" placeholder="john@email.com" />
-              <FormField label="Phone" placeholder="(555) 123-4567" />
+              <FormField label="Email *" placeholder="john@email.com" name="Email" />
+              <FormField label="Phone" placeholder="(555) 123-4567" name="Phone" />
             </div>
 
-            <FormField label="I am a... *" placeholder="" />
-            <FormField label="Subject *" placeholder="How can we help you?" />
+            <FormField label="I am a... *" placeholder="" name="IamA" />
+            <FormField label="Subject *" placeholder="How can we help you?" name="Subject" />
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-[#14224A]">
@@ -94,6 +142,8 @@ export default function Contact() {
               </label>
 
               <textarea
+              name="message"
+              onChange={handleChange}
                 rows="7"
                 placeholder="Tell us more about your inquiry..."
                 className="w-full resize-none rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#9D1C22]"
@@ -173,7 +223,7 @@ function SocialIcon({ icon }) {
   );
 }
 
-function FormField({ label, placeholder }) {
+function FormField({ label, placeholder, name }) {
   return (
     <div>
       <label className="mb-2 block text-sm font-semibold text-[#14224A]">
@@ -181,6 +231,8 @@ function FormField({ label, placeholder }) {
       </label>
 
       <input
+      name={name}
+      onChange={handleChange}
         type="text"
         placeholder={placeholder}
         className="w-full rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#9D1C22]"
