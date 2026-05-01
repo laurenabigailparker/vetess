@@ -1,5 +1,5 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "src/lib/supabase.js";
 import { useState } from "react";
 
 
