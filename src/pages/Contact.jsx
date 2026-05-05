@@ -1,6 +1,6 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-import { supabase } from "src/lib/supabase.js";
 import { useState } from "react";
+import { supabase } from "src/lib/supabase.js";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -22,25 +22,44 @@ export default function Contact() {
     }));
   };
 
+  /*
+  //  SUPABASE FUNCTION (DISABLED FOR NOW)
+  const submitToSupabase = async (data) => {
+    try {
+      const { error } = await supabase.from("submissions").insert([
+        {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          subject: data.subject,
+          message: data.message,
+        },
+      ]);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        return { success: false };
+      }
+
+      return { success: true };
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      return { success: false };
+    }
+  };
+  */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form submission:", formData);
+    console.log("Form submitted:", formData);
 
-    // Supabase disabled for now
     /*
-    await supabase.from("submissions").insert([
-      {
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        phone: formData.phone,
-        subject: formData.subject,
-        message: formData.message,
-      },
-    ]);
+    // ENABLE WHEN READY
+    await submitToSupabase(formData);
     */
 
-    // reset form after submit
     setFormData({
       firstName: "",
       lastName: "",
@@ -65,7 +84,8 @@ export default function Contact() {
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-10 px-6 py-20 lg:grid-cols-[0.85fr_1.25fr]">
-        {/* LEFT PANEL */}
+
+        {/* LEFT */}
         <div className="rounded-2xl bg-[#243866] p-8 text-white shadow-lg">
           <h2 className="font-serif text-2xl font-bold">
             Contact Information
@@ -97,16 +117,6 @@ export default function Contact() {
               }
             />
           </div>
-
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <p className="mb-4 text-sm text-white/60">Follow Us</p>
-
-            <div className="flex gap-3">
-              <SocialIcon icon={<span className="text-xs">in</span>} />
-              <SocialIcon icon={<span className="text-xs">f</span>} />
-              <SocialIcon icon={<span className="text-xs">ig</span>} />
-            </div>
-          </div>
         </div>
 
         {/* FORM */}
@@ -116,18 +126,18 @@ export default function Contact() {
           </h2>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+
             <div className="grid gap-5 md:grid-cols-2">
-              <FormField label="First Name *" placeholder="John" name="firstName" value={formData.firstName} onChange={handleChange} />
-              <FormField label="Last Name *" placeholder="Smith" name="lastName" value={formData.lastName} onChange={handleChange} />
+              <FormField label="First Name *" name="firstName" value={formData.firstName} onChange={handleChange} />
+              <FormField label="Last Name *" name="lastName" value={formData.lastName} onChange={handleChange} />
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
-              <FormField label="Email *" placeholder="john@email.com" name="email" value={formData.email} onChange={handleChange} />
-              <FormField label="Phone" placeholder="(555) 123-4567" name="phone" value={formData.phone} onChange={handleChange} />
+              <FormField label="Email *" name="email" value={formData.email} onChange={handleChange} />
+              <FormField label="Phone" name="phone" value={formData.phone} onChange={handleChange} />
             </div>
 
-            <FormField label="I am a... *" placeholder="" name="role" value={formData.role} onChange={handleChange} />
-            <FormField label="Subject *" placeholder="How can we help you?" name="subject" value={formData.subject} onChange={handleChange} />
+            <FormField label="Subject *" name="subject" value={formData.subject} onChange={handleChange} />
 
             <div>
               <label className="mb-2 block text-sm font-semibold text-[#14224A]">
@@ -140,7 +150,7 @@ export default function Contact() {
                 onChange={handleChange}
                 rows="7"
                 placeholder="Tell us more about your inquiry..."
-                className="w-full resize-none rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#9D1C22]"
+                className="w-full resize-none rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition focus:border-[#9D1C22]"
               />
             </div>
 
@@ -166,7 +176,7 @@ export default function Contact() {
 function ContactInfoItem({ icon, label, value }) {
   return (
     <div className="flex gap-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#A51E25] text-white">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#A51E25] text-white">
         {icon}
       </div>
 
@@ -178,18 +188,7 @@ function ContactInfoItem({ icon, label, value }) {
   );
 }
 
-function SocialIcon({ icon }) {
-  return (
-    <a
-      href="#"
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-    >
-      {icon}
-    </a>
-  );
-}
-
-function FormField({ label, placeholder, name, value, onChange }) {
+function FormField({ label, name, value, onChange }) {
   return (
     <div>
       <label className="mb-2 block text-sm font-semibold text-[#14224A]">
@@ -201,8 +200,7 @@ function FormField({ label, placeholder, name, value, onChange }) {
         value={value}
         onChange={onChange}
         type="text"
-        placeholder={placeholder}
-        className="w-full rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition placeholder:text-gray-400 focus:border-[#9D1C22]"
+        className="w-full rounded-lg border border-[#D8BE8A] px-4 py-3 text-sm outline-none transition focus:border-[#9D1C22]"
       />
     </div>
   );
