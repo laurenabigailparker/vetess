@@ -109,7 +109,7 @@ export default function JobCenterMap({ searchLocation }) {
         </p>
       )}
 
-      <div className="h-[420px] w-full overflow-hidden rounded-[20px] border border-[#e2ddd2] sm:h-[500px]">
+      <div className="mt-4 h-[420px] w-full overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-white sm:h-[500px]">
         <MapContainer
           center={mapCenter}
           zoom={10}
@@ -186,8 +186,7 @@ export default function JobCenterMap({ searchLocation }) {
                 <span>☎ {center.Phone}</span>
               </div>
 
-              <div className="my-5 h-px w-full bg-[#eee4d7]" />
-
+             <div className="my-5 h-px w-full bg-[#eee4d7]" />
               <div className="flex flex-wrap gap-2">
                 {center.VeteranRep === "Yes" && (
                   <span className="rounded-[8px] border border-[#efc7c8] bg-[#fff3f3] px-3 py-2 text-[13px] font-semibold text-[#a1272d]">

@@ -228,7 +228,7 @@ export default function JobBoard() {
 
           {/* saved jobs view */}
           {activeView === "saved" && (
-            <div className="px-5 py-12 text-center sm:px-8 lg:px-10">
+           <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
               <div className="mx-auto max-w-xl rounded-[20px] border border-dashed border-[#ddd4c8] bg-white px-6 py-12">
                 <h2
                   className="text-2xl text-[#2a3560]"
