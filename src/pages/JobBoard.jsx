@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import JobCard from "../components/JobCard";
 import JobCenterMap from "../components/JobCenterMap";
-const [submittedLocation, setSubmittedLocation] = useState("");
+
 
 const jobs = [];
 
@@ -13,6 +13,7 @@ export default function JobBoard() {
   const [keyword, setKeyword] = useState("");
   const [locationSearch, setLocationSearch] = useState("");
   const [displayCount, setDisplayCount] = useState(6);
+  const [submittedLocation, setSubmittedLocation] = useState("");
 
   /* front-end only filtering for now */
   const filteredJobs = useMemo(() => {
