@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import JobCard from "../components/JobCard";
 import JobCenterMap from "../components/JobCenterMap";
+const [submittedLocation, setSubmittedLocation] = useState("");
 
 const jobs = [];
 
@@ -93,8 +94,9 @@ export default function JobBoard() {
                   />
                 </div>
 
-                <button
-                  className="flex min-h-[72px] items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
+               <button
+  onClick={() => setSubmittedLocation(locationSearch)}
+  className="flex min-h-[72px] items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
                   style={{
                     fontFamily: '"DM Sans", sans-serif',
                     fontWeight: 600,
@@ -159,7 +161,7 @@ export default function JobBoard() {
             <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
               <div className="overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-[#f3eee4] shadow-sm">
                 <div className="p-4 sm:p-6">
- <JobCenterMap searchLocation={locationSearch} />
+ <JobCenterMap searchLocation={submittedLocation} />
 </div>
               </div>
 
