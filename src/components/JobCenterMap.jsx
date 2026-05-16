@@ -109,7 +109,7 @@ export default function JobCenterMap({ searchLocation }) {
         </p>
       )}
 
-      <div className="mt-4 h-[420px] w-full overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-white sm:h-[500px]">
+      <div className="mt-6 h-[360px] w-full overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-white sm:h-[420px]">
         <MapContainer
           center={mapCenter}
           zoom={10}
