@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "../lib/supabase.js"
 
 const donationAmounts = [
   { amount: "$50", label: "Resume Review" },
@@ -34,8 +35,63 @@ export default function Donate() {
   const [frequency, setFrequency] = useState("one-time");
   const [selectedAmount, setSelectedAmount] = useState("$100");
 
-  const handlePayment = () => {
-    alert(`Donation selected: ${selectedAmount} (${frequency})`);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value}));
+  };
+
+  const handleDonation = async () => {
+    // Step 1: Form validation
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      alert("Please fill out all required feilds.")
+      return;
+    }
+    // Step 2: send donation info to supabase
+    /*
+    const { data, error } = await SupabaseClient.from("donations").insert([
+      {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      amount: selectedAmount,
+      frequency: frequency,
+      },
+    ]);
+
+    if(error) {
+      console.error("Supabase error:", error);
+      return;
+    }
+      */
+
+    // Step 3: Initiate Stripe payment
+    /*
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+    const { error: stripeError } = await stripe.redirectToCheckout({
+      lineItems: [{ price: priceId, quantity: 1}],
+      mode: frequency === "monthly" ? "subscription" : "payment",
+      successUrl: window.location.origin + "/donate/success",
+      cancleUrl: window.location.origin + "/donate",
+    });
+
+    if (stripeError) {
+      console.error("Stripe Error:", stripeError);
+    }
+      */
+
+    console.log("Form submitted:", {
+      ...formData,
+      amount: selectedAmount,
+      frequency,
+    });
   };
 
   return (
@@ -142,28 +198,36 @@ export default function Donate() {
         <form className="mt-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <input
+            name="firstName"
               placeholder="First Name"
+              onChange={handleChange}
               className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
             />
             <input
+            name="lastName"
               placeholder="Last Name"
+              onChange={handleChange}
               className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
             />
           </div>
 
           <input
+          name="email"
             placeholder="Email Address"
+            onChange={handleChange}
             className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
           />
 
           <input
+          name="phone"
             placeholder="Phone Number (Optional)"
+            onChange={handleChange}
             className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
           />
 
           <button
             type="button"
-            onClick={handlePayment}
+            onClick={handleDonation}
             className="mt-6 h-[56px] w-full rounded-[12px] bg-[#8B1A1F] font-semibold text-white"
           >
             Continue to Payment →
