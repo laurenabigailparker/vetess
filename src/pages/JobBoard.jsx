@@ -1,198 +1,11 @@
 import { useMemo, useState } from "react";
 import JobCard from "../components/JobCard";
+import JobCenterMap from "../components/JobCenterMap";
 
-/* fake jobs for now so the page feels full + real */
-const jobs = [
-  {
-    id: 1,
-    title: "Cybersecurity Analyst",
-    company: "Booz Allen Hamilton",
-    location: "Washington, DC",
-    type: "Full-time",
-    salary: "$85k – $120k",
-    tags: ["Veteran Preferred", "Security Clearance", "Remote OK"],
-    saved: false,
-  },
-  {
-    id: 2,
-    title: "Operations Manager",
-    company: "Boeing",
-    location: "Seattle, WA",
-    type: "Full-time",
-    salary: "$95k – $135k",
-    tags: ["Veteran Preferred", "Leadership"],
-    saved: false,
-  },
-  {
-    id: 3,
-    title: "Project Manager",
-    company: "Dell Technologies",
-    location: "Austin, TX",
-    type: "Full-time",
-    salary: "$80k – $110k",
-    tags: ["Remote", "Military Spouse OK"],
-    saved: false,
-  },
-  {
-    id: 4,
-    title: "Systems Engineer",
-    company: "Lockheed Martin",
-    location: "Fort Worth, TX",
-    type: "Full-time",
-    salary: "$90k – $125k",
-    tags: ["Veteran Preferred", "Security Clearance"],
-    saved: false,
-  },
-  {
-    id: 5,
-    title: "Operations Lead",
-    company: "Amazon",
-    location: "New York, NY",
-    type: "Full-time",
-    salary: "$88k – $115k",
-    tags: ["Veteran Preferred", "Sign-On Bonus"],
-    saved: false,
-  },
-  {
-    id: 6,
-    title: "Program Manager",
-    company: "Raytheon Technologies",
-    location: "Huntsville, AL",
-    type: "Full-time",
-    salary: "$92k – $130k",
-    tags: ["Veteran Preferred", "Security Clearance", "Relocation"],
-    saved: false,
-  },
-  {
-    id: 7,
-    title: "Cybersecurity Analyst",
-    company: "Booz Allen Hamilton",
-    location: "Washington, DC",
-    type: "Full-time",
-    salary: "$85k – $120k",
-    tags: ["Veteran Preferred", "Security Clearance", "Remote OK"],
-    saved: false,
-  },
-  {
-    id: 8,
-    title: "Operations Manager",
-    company: "Boeing",
-    location: "Seattle, WA",
-    type: "Full-time",
-    salary: "$95k – $135k",
-    tags: ["Veteran Preferred", "Leadership"],
-    saved: false,
-  },
-  {
-    id: 9,
-    title: "Project Manager",
-    company: "Dell Technologies",
-    location: "Austin, TX",
-    type: "Full-time",
-    salary: "$80k – $110k",
-    tags: ["Remote", "Military Spouse OK"],
-    saved: false,
-  },
-  {
-    id: 10,
-    title: "Systems Engineer",
-    company: "Lockheed Martin",
-    location: "Fort Worth, TX",
-    type: "Full-time",
-    salary: "$90k – $125k",
-    tags: ["Veteran Preferred", "Security Clearance"],
-    saved: false,
-  },
-  {
-    id: 11,
-    title: "Operations Lead",
-    company: "Amazon",
-    location: "New York, NY",
-    type: "Full-time",
-    salary: "$88k – $115k",
-    tags: ["Veteran Preferred", "Sign-On Bonus"],
-    saved: false,
-  },
-  {
-    id: 12,
-    title: "Program Manager",
-    company: "Raytheon Technologies",
-    location: "Huntsville, AL",
-    type: "Full-time",
-    salary: "$92k – $130k",
-    tags: ["Veteran Preferred", "Security Clearance", "Relocation"],
-    saved: false,
-  },
-  {
-    id: 13,
-    title: "Cybersecurity Analyst",
-    company: "Booz Allen Hamilton",
-    location: "Washington, DC",
-    type: "Full-time",
-    salary: "$85k – $120k",
-    tags: ["Veteran Preferred", "Security Clearance", "Remote OK"],
-    saved: false,
-  },
-  {
-    id: 14,
-    title: "Operations Manager",
-    company: "Boeing",
-    location: "Seattle, WA",
-    type: "Full-time",
-    salary: "$95k – $135k",
-    tags: ["Veteran Preferred", "Leadership"],
-    saved: false,
-  },
-  {
-    id: 15,
-    title: "Project Manager",
-    company: "Dell Technologies",
-    location: "Austin, TX",
-    type: "Full-time",
-    salary: "$80k – $110k",
-    tags: ["Remote", "Military Spouse OK"],
-    saved: false,
-  },
-  {
-    id: 16,
-    title: "Systems Engineer",
-    company: "Lockheed Martin",
-    location: "Fort Worth, TX",
-    type: "Full-time",
-    salary: "$90k – $125k",
-    tags: ["Veteran Preferred", "Security Clearance"],
-    saved: false,
-  },
-  {
-    id: 17,
-    title: "Operations Lead",
-    company: "Amazon",
-    location: "New York, NY",
-    type: "Full-time",
-    salary: "$88k – $115k",
-    tags: ["Veteran Preferred", "Sign-On Bonus"],
-    saved: false,
-  },
-  {
-    id: 18,
-    title: "Program Manager",
-    company: "Raytheon Technologies",
-    location: "Huntsville, AL",
-    type: "Full-time",
-    salary: "$92k – $130k",
-    tags: ["Veteran Preferred", "Security Clearance", "Relocation"],
-    saved: false,
-  },
-];
+const jobs = [];
 
 /* fake city cards for map view */
-const mapCities = [
-  { id: 1, city: "Washington, DC", count: 389 },
-  { id: 2, city: "New York, NY", count: 412 },
-  { id: 3, city: "Seattle, WA", count: 289 },
-  { id: 4, city: "Houston, TX", count: 234 },
-  { id: 5, city: "San Diego, CA", count: 198 },
-];
+
 
 export default function JobBoard() {
   const [activeView, setActiveView] = useState("list");
@@ -345,62 +158,12 @@ export default function JobBoard() {
           {activeView === "map" && (
             <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
               <div className="overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-[#f3eee4] shadow-sm">
-                <div className="relative h-[420px] w-full bg-[#dbe8ec] sm:h-[500px]">
-                  <iframe
-                    title="United States Job Map"
-                    src="https://www.google.com/maps?q=United%20States&z=4&output=embed"
-                    className="h-full w-full border-0"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                </div>
+                <div className="p-4 sm:p-6">
+ <JobCenterMap searchLocation={locationSearch} />
+</div>
               </div>
 
-              <div className="mt-5 rounded-[20px] border border-[#ebe3d7] bg-[#f7f1e7] p-5 shadow-[0_1px_4px_rgba(70,52,24,0.03)] sm:p-6">
-                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {mapCities.map((item) => (
-                    <div
-                      key={item.id}
-                      className="rounded-[16px] border border-[#e7dfd2] bg-[#fbf9f4] px-4 py-3 shadow-[0_2px_6px_rgba(27,31,59,0.05)] transition-all duration-200 ease-out hover:-translate-y-[2px] hover:border-[#ded6c8] hover:shadow-[0_6px_14px_rgba(27,31,59,0.08)]"
-                    >
-                      <div className="mb-4 flex items-start justify-between gap-3">
-                        <div>
-                          <h3
-                            className="text-[15px] text-[#2a3560]"
-                            style={{
-                              fontFamily: '"DM Sans", sans-serif',
-                              fontWeight: 700,
-                            }}
-                          >
-                            {item.city}
-                          </h3>
-                          <p
-                            className="mt-1 text-[14px] text-[#7a756e]"
-                            style={{
-                              fontFamily: '"DM Sans", sans-serif',
-                              fontWeight: 400,
-                            }}
-                          >
-                            {item.count} open positions
-                          </p>
-                        </div>
-
-                        <span className="text-sm text-[#9f1d20]">📍</span>
-                      </div>
-
-                      <button
-                        className="w-full rounded-[10px] bg-[#f7f3ea] px-4 py-2 text-[14px] text-[#2f3e6a] transition-all duration-200 ease-out hover:bg-[#efe8dd]"
-                        style={{
-                          fontFamily: '"DM Sans", sans-serif',
-                          fontWeight: 700,
-                        }}
-                      >
-                        View Jobs
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              
             </div>
           )}
 
@@ -408,18 +171,37 @@ export default function JobBoard() {
           {activeView === "list" && (
             <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
               <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-[15px] font-normal text-[#7a746c]">
-                  Showing 2,447 jobs
-                </p>
+               <p className="text-[15px] font-normal text-[#7a746c]">
+  Official job listings coming soon
+</p>
 
                 <div className="h-[44px] w-full max-w-[128px] rounded-[10px] border border-[#e3ddd2] bg-white" />
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {displayedJobs.map((job) => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
+             {displayedJobs.length > 0 ? (
+  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    {displayedJobs.map((job) => (
+      <JobCard key={job.id} job={job} />
+    ))}
+  </div>
+) : (
+  <div className="rounded-[20px] border border-dashed border-[#ddd4c8] bg-white px-6 py-14 text-center">
+    <h2
+      className="text-2xl text-[#2a3560]"
+      style={{
+        fontFamily: '"Playfair Display", serif',
+        fontWeight: 600,
+      }}
+    >
+      Official veteran job listings coming soon
+    </h2>
+
+    <p className="mt-3 text-sm leading-7 text-[#726d66]">
+      Vetess is currently integrating official workforce and employment APIs
+      to provide real-time veteran-friendly job opportunities.
+    </p>
+  </div>
+)}
 
               {displayCount < filteredJobs.length && (
                 <div className="mt-8 flex justify-center">
