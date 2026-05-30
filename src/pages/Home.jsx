@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import VeteranIntakeModal from '../components/VeteranIntakeModal'
 
@@ -42,29 +43,6 @@ const services = [
   },
 ]
 
-const testimonials = [
-  {
-    name: 'Sgt. Marcus Reed',
-    role: 'US Army Veteran',
-    quote:
-      'Vetess coach translated 8 years as an Army Intelligence Officer into language civilian employers actually understood.',
-    placement: 'Placed: Language Analyst @ Booz Allen Hamilton',
-  },
-  {
-    name: 'Jennifer Walsh',
-    role: 'Military Spouse',
-    quote:
-      'As a military spouse who moved often, Vetess helped me build a career story instead of a messy list of jobs.',
-    placement: 'Placed: UX Designer @ Dell Technologies',
-  },
-  {
-    name: 'Cpl. Devon Torres',
-    role: 'USMC Veteran',
-    quote:
-      'Mock interviews were game-changing. I stopped answering like a Marine and started answering like a professional.',
-    placement: 'Placed: Program Manager @ FedEx',
-  },
-]
 
 function AnimatedStat({ value, prefix = '', suffix = '', label, start }) {
   const [count, setCount] = useState(0)
@@ -112,6 +90,8 @@ export default function Home() {
   const statsRef = useRef(null)
   const [startStats, setStartStats] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [testimonials, setTestimonials] = useState([]);
+const [_successStories, setSuccessStories] = useState([]);
 
   useEffect(() => {
     const node = statsRef.current
@@ -131,6 +111,27 @@ export default function Home() {
 
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+  const loadContent = async () => {
+    const { data: testimonialData } = await supabase
+      .from("testimonials")
+      .select("*")
+      .eq("status", "Published")
+      .order("created_at", { ascending: false });
+
+    const { data: storyData } = await supabase
+      .from("success_stories")
+      .select("*")
+      .eq("status", "Published")
+      .order("created_at", { ascending: false });
+
+    setTestimonials(testimonialData || []);
+    setSuccessStories(storyData || []);
+  };
+
+  loadContent();
+}, []);
 
   return (
     <div className="bg-sand-0">
@@ -286,9 +287,11 @@ export default function Home() {
 
                 <div className="mt-6">
                   <p className="font-semibold text-navy-900">{item.name}</p>
-                  <p className="text-sm text-ink-muted">{item.role}</p>
+                  <p className="text-sm text-ink-muted">
+  {item.title || item.branch}
+</p>
                   <p className="mt-2 text-xs font-semibold leading-6 text-gold-700">
-                    {item.placement}
+                    Placed: {item.placed_company}
                   </p>
                 </div>
               </div>

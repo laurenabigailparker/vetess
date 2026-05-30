@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
 export default function ForVeterans() {
   const serviceCards = [
     {
@@ -38,32 +41,28 @@ export default function ForVeterans() {
     },
   ];
 
-  const successStories = [
-    {
-      text: "VetBridge coach translated 8 years as an Army Intelligence Officer into language civilian employers actually understood. Hired in 6 weeks.",
-      name: "Sgt. Marcus Reed (Ret.)",
-      sub: "US Army 8yr Infantry",
-      placed: "Placed: Cybersecurity Analyst @ Booz Allen Hamilton",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      text: "As a military spouse who moved 4 times in 6 years, my resume was a disaster. VetBridge helped me build a career story, not just a job list. Dream job remote.",
-      name: "Jennifer Walsh",
-      sub: "Military Spouse, Navy Family",
-      placed: "Placed: HR Manager @ Dell Technologies",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      text: "Mock interviews were game-changing. Helped me stop answering like a Marine and start answering like a professional. Six-figure offer, 90 days.",
-      name: "Cpl. Devon Torres (Ret.)",
-      sub: "USMC 12yr Combat Logistics",
-      placed: "Placed: Operations Director @ FedEx",
-      image:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=160&q=80",
-    },
-  ];
+const [successStories, setSuccessStories] = useState([]);
+
+useEffect(() => {
+  const loadStories = async () => {
+    const { data, error } = await supabase
+      .from("success_stories")
+      .select("*")
+      .eq("status", "Published")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error loading success stories:", error);
+      return;
+    }
+
+    setSuccessStories(data || []);
+  };
+
+  loadStories();
+}, []);
+
+  
 
   return (
     <section className="min-h-screen bg-[#F2F2EF] px-4 py-8 sm:px-5 md:px-8 md:py-12">
@@ -142,17 +141,19 @@ export default function ForVeterans() {
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {successStories.map((story) => (
-              <article key={story.name} className="rounded-[18px] border bg-white px-5 py-5">
+              <article key={story.id} className="rounded-[18px] border bg-white px-5 py-5">
                 <p className="mb-5 text-[#CCB12B]">★★★★★</p>
-                <p className="text-[15px] text-[#2F2E2E]">{story.text}</p>
+                <p className="text-[15px] text-[#2F2E2E]">{story.summary}</p>
 
                 <div className="mt-6 border-t pt-5">
                   <div className="flex gap-3">
-                    <img src={story.image} alt={story.name} className="h-12 w-12 rounded-full" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#213059] text-white font-bold">
+  {story.veteran_name?.charAt(0)}
+</div> className="h-12 w-12 rounded-full" 
                     <div>
-                      <p className="font-bold">{story.name}</p>
-                      <p className="text-[12px] text-[#7A746E]">{story.sub}</p>
-                      <p className="text-[12px] text-[#A28625]">{story.placed}</p>
+                      <p className="font-bold">{story.veteran_name}</p>
+                      <p className="text-[12px] text-[#7A746E]">{story.company}</p>
+                      <p className="text-[12px] text-[#A28625]">Placed Through Vetess</p>
                     </div>
                   </div>
                 </div>

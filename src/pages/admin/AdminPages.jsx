@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabase";
 
 const cardClass =
@@ -10,7 +10,7 @@ const inputClass =
 const redButton =
   "rounded-2xl bg-[#911b1d] px-5 py-3 text-sm font-bold text-white hover:opacity-90";
 
-const navyButton =
+const _navyButton =
   "rounded-2xl bg-[#1f3057] px-5 py-3 text-sm font-bold text-white hover:opacity-90";
 
 function PageTitle({ title, subtitle, button }) {
@@ -68,7 +68,40 @@ function useSupabaseTable(tableName, orderColumn = "created_at") {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const loadRows = useCallback(async () => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadRows = async () => {
+      setLoading(true);
+
+      let query = supabase.from(tableName).select("*");
+
+      if (orderColumn) {
+        query = query.order(orderColumn, { ascending: false });
+      }
+
+      const { data, error } = await query;
+
+      if (!isMounted) return;
+
+      if (error) {
+        console.error(`Error loading ${tableName}:`, error);
+        setRows([]);
+      } else {
+        setRows(data || []);
+      }
+
+      setLoading(false);
+    };
+
+    loadRows();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [tableName, orderColumn]);
+
+  const refreshRows = async () => {
     setLoading(true);
 
     let query = supabase.from(tableName).select("*");
@@ -87,11 +120,7 @@ function useSupabaseTable(tableName, orderColumn = "created_at") {
     }
 
     setLoading(false);
-  }, [tableName, orderColumn]);
-
-  useEffect(() => {
-    loadRows();
-  }, [loadRows]);
+  };
 
   const insertRow = async (payload) => {
     const { error } = await supabase.from(tableName).insert([payload]);
@@ -102,9 +131,10 @@ function useSupabaseTable(tableName, orderColumn = "created_at") {
       return false;
     }
 
-    await loadRows();
+    await refreshRows();
     return true;
   };
+
 
   const deleteRow = async (id) => {
     const confirmDelete = window.confirm("Delete this item?");
@@ -118,11 +148,11 @@ function useSupabaseTable(tableName, orderColumn = "created_at") {
       return false;
     }
 
-    await loadRows();
+    await refreshRows();
     return true;
   };
 
-  return { rows, loading, loadRows, insertRow, deleteRow };
+   return { rows, loading, refreshRows, insertRow, deleteRow };
 }
 
 function TextInput({ label, name, value, onChange, required, placeholder, type = "text" }) {

@@ -158,6 +158,12 @@ export default function Navbar() {
               onClose={() => setIsModalOpen(false)}
               />
             </div>
+            <Link
+  to="/admin/login"
+  className="rounded-full border border-[#1f3057] px-4 py-2 text-sm font-semibold text-[#1f3057]"
+>
+  Admin
+</Link>
           </div>
         </div>
       )}

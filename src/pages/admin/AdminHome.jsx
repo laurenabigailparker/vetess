@@ -4,26 +4,59 @@ import { supabase } from "../../lib/supabase";
 
 export default function AdminHome() {
   const navigate = useNavigate();
+
   const [submissionCount, setSubmissionCount] = useState(0);
+  const [jobCount, setJobCount] = useState(0);
+  const [donationCount, setDonationCount] = useState(0);
+  const [testimonialCount, setTestimonialCount] = useState(0);
 
   // function first
-  const fetchSubmissionCount = async () => {
-    const { count, error } = await supabase
+const loadSidebarStats = async () => {
+  const [
+    submissionsResult,
+    jobsResult,
+    donationsResult,
+    testimonialsResult,
+  ] = await Promise.all([
+    supabase
       .from("submissions")
-      .select("*", { count: "exact", head: true });
+      .select("*", { count: "exact", head: true }),
 
-    if (error) {
-      console.log("ERROR:", error);
+    supabase
+      .from("job_listings")
+      .select("*", { count: "exact", head: true }),
+
+    supabase
+      .from("donations")
+      .select("*", { count: "exact", head: true }),
+
+    supabase
+      .from("testimonials")
+      .select("*", { count: "exact", head: true }),
+  ]);
+
+  setSubmissionCount(submissionsResult.count || 0);
+  setJobCount(jobsResult.count || 0);
+  setDonationCount(donationsResult.count || 0);
+  setTestimonialCount(testimonialsResult.count || 0);
+};
+
+useEffect(() => {
+  const checkSession = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      navigate("/admin/login");
       return;
     }
 
-    setSubmissionCount(count || 0);
+    loadSidebarStats();
   };
 
-  // using it here
-  useEffect(() => {
-    fetchSubmissionCount();
-  }, []);
+  checkSession();
+}, [navigate]);
 
   return (
     <div className="min-h-screen bg-[#FEFCF8] font-sans text-slate-900">
@@ -54,19 +87,29 @@ export default function AdminHome() {
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button className="hidden rounded-2xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:bg-white/10 sm:inline-flex">
-            🔔
-          </button>
+     <div className="flex items-center gap-4">
+  <button className="hidden rounded-2xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:bg-white/10 sm:inline-flex">
+    🔔
+  </button>
 
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="text-sm font-semibold text-white transition hover:text-slate-200"
-          >
-            Sign Out →
-          </button>
-        </div>
+  <button
+    onClick={() => navigate("/")}
+    className="rounded-xl border border-slate-600 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+  >
+    🌐 View Website
+  </button>
+
+  <button
+    type="button"
+    onClick={async () => {
+      await supabase.auth.signOut();
+      navigate("/admin/login");
+    }}
+    className="rounded-xl bg-[#911b1d] px-4 py-3 text-sm font-bold text-white transition hover:opacity-90"
+  >
+    🚪 Sign Out
+  </button>
+</div>
       </header>
 
       <div className="pt-16">
@@ -127,7 +170,7 @@ export default function AdminHome() {
                   >
                     <span>Donations</span>
                     <span className="rounded-full bg-[#911b1d] px-2 py-0.5 text-[10px] font-semibold text-white">
-                      12
+                      {donationCount}
                     </span>
                   </NavLink>
 
@@ -177,7 +220,7 @@ export default function AdminHome() {
                   >
                     <span>Job Listings</span>
                     <span className="rounded-full bg-[#911b1d] px-2 py-0.5 text-[10px] font-semibold text-white">
-                      2.4k
+                      {jobCount}
                     </span>
                   </NavLink>
                 </div>
@@ -189,18 +232,22 @@ export default function AdminHome() {
                 </p>
 
                 <div className="space-y-1">
-                  <NavLink
-                    to="testimonials"
-                    className={({ isActive }) =>
-                      `block rounded-3xl px-4 py-3 ${
-                        isActive
-                          ? "bg-[#1b315e] text-white"
-                          : "text-slate-300 hover:bg-white/5"
-                      }`
-                    }
-                  >
-                    Testimonials
-                  </NavLink>
+                 <NavLink
+  to="testimonials"
+  className={({ isActive }) =>
+    `flex items-center justify-between rounded-3xl px-4 py-3 ${
+      isActive
+        ? "bg-[#1b315e] text-white"
+        : "text-slate-300 hover:bg-white/5"
+    }`
+  }
+>
+  <span>Testimonials</span>
+
+  <span className="rounded-full bg-[#911b1d] px-2 py-0.5 text-[10px] font-semibold text-white">
+    {testimonialCount}
+  </span>
+</NavLink>
 
                   <NavLink
                     to="success-stories"

@@ -1,12 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import JobCard from "../components/JobCard";
 import JobCenterMap from "../components/JobCenterMap";
-
-
-const jobs = [];
-
-/* fake city cards for map view */
-
+import { supabase } from "../lib/supabase";
 
 export default function JobBoard() {
   const [activeView, setActiveView] = useState("list");
@@ -14,23 +9,68 @@ export default function JobBoard() {
   const [locationSearch, setLocationSearch] = useState("");
   const [displayCount, setDisplayCount] = useState(6);
   const [submittedLocation, setSubmittedLocation] = useState("");
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  /* front-end only filtering for now */
+  useEffect(() => {
+    const loadJobs = async () => {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("job_listings")
+        .select("*")
+        .eq("status", "Active")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error loading jobs:", error);
+        setJobs([]);
+      } else {
+        setJobs(
+          (data || []).map((job) => ({
+            ...job,
+            tags: [job.type, job.status, job.company, job.location].filter(
+              Boolean
+            ),
+            saved: false,
+          }))
+        );
+      }
+
+      setLoading(false);
+    };
+
+    loadJobs();
+  }, []);
+
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      const searchableText = [
+        job.title,
+        job.company,
+        job.location,
+        job.type,
+        job.status,
+        job.description,
+        ...(job.tags || []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
       const matchesKeyword =
         keyword.trim() === "" ||
-        job.title.toLowerCase().includes(keyword.toLowerCase()) ||
-        job.company.toLowerCase().includes(keyword.toLowerCase()) ||
-        job.tags.join(" ").toLowerCase().includes(keyword.toLowerCase());
+        searchableText.includes(keyword.toLowerCase());
 
       const matchesLocation =
         locationSearch.trim() === "" ||
-        job.location.toLowerCase().includes(locationSearch.toLowerCase());
+        (job.location || "")
+          .toLowerCase()
+          .includes(locationSearch.toLowerCase());
 
       return matchesKeyword && matchesLocation;
     });
-  }, [keyword, locationSearch]);
+  }, [jobs, keyword, locationSearch]);
 
   const displayedJobs = filteredJobs.slice(0, displayCount);
   const savedJobs = jobs.filter((job) => job.saved);
@@ -48,7 +88,6 @@ export default function JobBoard() {
 
       <div className="mx-auto max-w-[1240px]">
         <div className="overflow-hidden rounded-[28px] border border-[#e3ddd2] bg-[#f3eee4] shadow-[0_1px_6px_rgba(70,52,24,0.04)]">
-          {/* top section */}
           <div className="border-b border-[#e6e0d5] px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
             <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8d2227]">
               Veteran Job Board
@@ -66,11 +105,11 @@ export default function JobBoard() {
             </h1>
 
             <p className="mt-4 text-[15px] font-normal leading-6 text-[#7b746c] sm:text-[16px]">
-              2,447 openings from employers committed to hiring veterans ·
-              Updated daily
+              {loading
+                ? "Loading active job listings..."
+                : `${jobs.length} active job listings from employers committed to hiring veterans`}
             </p>
 
-            {/* search area */}
             <div className="mt-7 overflow-hidden rounded-[16px] border border-[#d8d1c3] bg-white shadow-[0_4px_12px_rgba(27,31,59,0.06)]">
               <div className="flex flex-col lg:flex-row">
                 <div className="flex min-h-[72px] flex-1 items-center gap-3 border-b border-[#e7e0d4] px-5 lg:border-b-0 lg:border-r">
@@ -95,9 +134,9 @@ export default function JobBoard() {
                   />
                 </div>
 
-               <button
-  onClick={() => setSubmittedLocation(locationSearch)}
-  className="flex min-h-[72px] items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
+                <button
+                  onClick={() => setSubmittedLocation(locationSearch)}
+                  className="flex min-h-[72px] items-center justify-center bg-[#9f1d20] px-8 text-[15px] text-white transition hover:bg-[#8d181b] lg:min-w-[220px]"
                   style={{
                     fontFamily: '"DM Sans", sans-serif',
                     fontWeight: 600,
@@ -108,7 +147,6 @@ export default function JobBoard() {
               </div>
             </div>
 
-            {/* tabs */}
             <div className="mt-6 flex items-center gap-8 border-b border-[#e4ddd2] pb-4">
               <button
                 onClick={() => setActiveView("map")}
@@ -157,54 +195,53 @@ export default function JobBoard() {
             </div>
           </div>
 
-          {/* map view */}
           {activeView === "map" && (
             <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
               <div className="overflow-hidden rounded-[20px] border border-[#e2ddd2] bg-[#f3eee4] shadow-sm">
                 <div className="p-4 sm:p-6">
- <JobCenterMap searchLocation={submittedLocation} />
-</div>
+                  <JobCenterMap searchLocation={submittedLocation} />
+                </div>
               </div>
-
-              
             </div>
           )}
 
-          {/* list view */}
           {activeView === "list" && (
             <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10">
               <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-               <p className="text-[15px] font-normal text-[#7a746c]">
-  Official job listings coming soon
-</p>
+                <p className="text-[15px] font-normal text-[#7a746c]">
+                  {loading
+                    ? "Loading job listings..."
+                    : `${filteredJobs.length} active job listings available`}
+                </p>
 
                 <div className="h-[44px] w-full max-w-[128px] rounded-[10px] border border-[#e3ddd2] bg-white" />
               </div>
 
-             {displayedJobs.length > 0 ? (
-  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-    {displayedJobs.map((job) => (
-      <JobCard key={job.id} job={job} />
-    ))}
-  </div>
-) : (
-  <div className="rounded-[20px] border border-dashed border-[#ddd4c8] bg-white px-6 py-14 text-center">
-    <h2
-      className="text-2xl text-[#2a3560]"
-      style={{
-        fontFamily: '"Playfair Display", serif',
-        fontWeight: 600,
-      }}
-    >
-      Official veteran job listings coming soon
-    </h2>
+              {displayedJobs.length > 0 ? (
+                <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                  {displayedJobs.map((job) => (
+                    <JobCard key={job.id} job={job} />
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-[20px] border border-dashed border-[#ddd4c8] bg-white px-6 py-14 text-center">
+                  <h2
+                    className="text-2xl text-[#2a3560]"
+                    style={{
+                      fontFamily: '"Playfair Display", serif',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {loading ? "Loading jobs..." : "No matching jobs found"}
+                  </h2>
 
-    <p className="mt-3 text-sm leading-7 text-[#726d66]">
-      Vetess is currently integrating official workforce and employment APIs
-      to provide real-time veteran-friendly job opportunities.
-    </p>
-  </div>
-)}
+                  <p className="mt-3 text-sm leading-7 text-[#726d66]">
+                    {loading
+                      ? "Pulling active job listings from Supabase."
+                      : "Try searching a different job title, company, skill, or location."}
+                  </p>
+                </div>
+              )}
 
               {displayCount < filteredJobs.length && (
                 <div className="mt-8 flex justify-center">
@@ -226,9 +263,8 @@ export default function JobBoard() {
             </div>
           )}
 
-          {/* saved jobs view */}
           {activeView === "saved" && (
-           <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+            <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
               <div className="mx-auto max-w-xl rounded-[20px] border border-dashed border-[#ddd4c8] bg-white px-6 py-12">
                 <h2
                   className="text-2xl text-[#2a3560]"

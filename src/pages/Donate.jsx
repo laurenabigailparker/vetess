@@ -53,45 +53,34 @@ export default function Donate() {
       alert("Please fill out all required feilds.")
       return;
     }
-    // Step 2: send donation info to supabase
-    /*
-    const { data, error } = await SupabaseClient.from("donations").insert([
-      {
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      email: formData.email,
-      phone: formData.phone,
-      amount: selectedAmount,
-      frequency: frequency,
-      },
-    ]);
+    const amountValue = parseInt(
+  selectedAmount.replace("$", "").replace(",", "")
+) || 0;
 
-    if(error) {
-      console.error("Supabase error:", error);
-      return;
-    }
-      */
+const { error } = await supabase.from("donations").insert([
+  {
+    donor_name: `${formData.firstName} ${formData.lastName}`,
+    email: formData.email,
+    amount: amountValue,
+    type: frequency,
+    status: "Pending",
+  },
+]);
 
-    // Step 3: Initiate Stripe payment
-    /*
-    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-    const { error: stripeError } = await stripe.redirectToCheckout({
-      lineItems: [{ price: priceId, quantity: 1}],
-      mode: frequency === "monthly" ? "subscription" : "payment",
-      successUrl: window.location.origin + "/donate/success",
-      cancleUrl: window.location.origin + "/donate",
-    });
+if (error) {
+  console.error("Supabase error:", error);
+  alert("Donation failed.");
+  return;
+}
 
-    if (stripeError) {
-      console.error("Stripe Error:", stripeError);
-    }
-      */
+alert("Donation submitted successfully!");
 
-    console.log("Form submitted:", {
-      ...formData,
-      amount: selectedAmount,
-      frequency,
-    });
+setFormData({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+});
   };
 
   return (
@@ -196,34 +185,39 @@ export default function Donate() {
         </div>
 
         <form className="mt-8">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <input
-            name="firstName"
-              placeholder="First Name"
-              onChange={handleChange}
-              className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
-            />
-            <input
-            name="lastName"
-              placeholder="Last Name"
-              onChange={handleChange}
-              className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
-            />
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <input
+    name="firstName"
+    value={formData.firstName}
+    placeholder="First Name"
+    onChange={handleChange}
+    className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
+  />
 
-          <input
-          name="email"
-            placeholder="Email Address"
-            onChange={handleChange}
-            className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
-          />
+  <input
+    name="lastName"
+    value={formData.lastName}
+    placeholder="Last Name"
+    onChange={handleChange}
+    className="h-[48px] rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
+  />
+</div>
 
-          <input
-          name="phone"
-            placeholder="Phone Number (Optional)"
-            onChange={handleChange}
-            className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
-          />
+<input
+  name="email"
+  value={formData.email}
+  placeholder="Email Address"
+  onChange={handleChange}
+  className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
+/>
+
+<input
+  name="phone"
+  value={formData.phone}
+  placeholder="Phone Number (Optional)"
+  onChange={handleChange}
+  className="mt-4 h-[48px] w-full rounded-[12px] border-2 border-[#EDE0C8] px-4 placeholder:text-[#3D3529]/50"
+/>
 
           <button
             type="button"
