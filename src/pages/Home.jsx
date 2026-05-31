@@ -3,11 +3,11 @@ import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import VeteranIntakeModal from '../components/VeteranIntakeModal'
 
-const stats = [
-  { value: 47000, suffix: '+', label: 'Veterans Placed' },
-  { value: 2400, suffix: '+', label: 'Employers Hiring Now' },
-  { value: 94, suffix: '%', label: 'Hired in 90 Days' },
-  { value: 0, prefix: '$', suffix: '', label: 'Cost to Veterans' },
+const defaultStats = [
+  { key: 'jobs', value: 0, suffix: '', label: 'Open Opportunities' },
+  { key: 'employers', value: 0, suffix: '', label: 'Employer Partners' },
+  { key: 'stories', value: 0, suffix: '', label: 'Success Stories' },
+  { key: 'cost', value: 0, prefix: '$', suffix: '', label: 'Cost to Veterans' },
 ]
 
 const services = [
@@ -90,6 +90,7 @@ export default function Home() {
   const statsRef = useRef(null)
   const [startStats, setStartStats] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [stats, setStats] = useState(defaultStats)
   const [testimonials, setTestimonials] = useState([]);
 const [_successStories, setSuccessStories] = useState([]);
 
@@ -133,6 +134,54 @@ const [_successStories, setSuccessStories] = useState([]);
   loadContent();
 }, []);
 
+useEffect(() => {
+  const loadStats = async () => {
+    const { data: jobsData } = await supabase
+      .from('job_listings')
+      .select('*')
+      .eq('status', 'Active')
+
+    const { data: storiesData } = await supabase
+      .from('success_stories')
+      .select('*')
+      .eq('status', 'Published')
+
+    const employerCount = new Set(
+      (jobsData || []).map((job) => job.company).filter(Boolean)
+    ).size
+
+    setStats([
+      {
+        key: 'jobs',
+        value: jobsData?.length || 0,
+        suffix: '',
+        label: 'Open Opportunities',
+      },
+      {
+        key: 'employers',
+        value: employerCount,
+        suffix: '',
+        label: 'Employer Partners',
+      },
+      {
+        key: 'stories',
+        value: storiesData?.length || 0,
+        suffix: '',
+        label: 'Success Stories',
+      },
+      {
+        key: 'cost',
+        value: 0,
+        prefix: '$',
+        suffix: '',
+        label: 'Cost to Veterans',
+      },
+    ])
+  }
+
+  loadStats()
+}, [])
+
   return (
     <div className="bg-sand-0">
       <section className="bg-sand-100 pt-10 sm:pt-12 md:pt-16">
@@ -175,15 +224,15 @@ const [_successStories, setSuccessStories] = useState([]);
                 onClick={() => navigate('/job-board')}
                 className="w-full rounded-md border border-navy-700 px-5 py-3 text-sm font-semibold text-navy-700 transition hover:bg-navy-700 hover:text-white sm:w-auto"
               >
-                Browse 2,400+ Jobs
+                Browse Jobs
               </button>
             </div>
 
             <div className="mt-5 flex flex-col gap-2 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:gap-4 md:mt-6">
-              <span>✓ 100% Free for Veterans</span>
-              <span>✓ 47,000+ Placed</span>
-              <span>✓ No Login to Browse</span>
-            </div>
+  <span>✓ 100% Free for Veterans</span>
+  <span>✓ Real Opportunities</span>
+  <span>✓ No Login Required</span>
+</div>
           </div>
 
           <div className="order-1 lg:order-2">

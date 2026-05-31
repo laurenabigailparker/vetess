@@ -10,6 +10,7 @@ import Donate from "./pages/Donate";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminHome from "./pages/admin/AdminHome";
 import Contact from "./pages/Contact";
+import ScrollToTop from "./components/ScrollToTop";
 import {
   AdminDashboardPage,
   AdminDonationsPage,
@@ -21,6 +22,7 @@ import {
   AdminPagesContentPage,
   AdminUsersPage,
   AdminSettingsPage,
+  AdminSubmissionsPage,
 } from "./pages/admin/AdminPages";
 
 export default function App() {
@@ -32,6 +34,7 @@ export default function App() {
       {!hideNavbar && <Navbar />}
 
       <main className="flex-1">
+         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/job-board" element={<JobBoard />} />
@@ -56,6 +59,7 @@ export default function App() {
             <Route path="pages-content" element={<AdminPagesContentPage />} />
             <Route path="admin-users" element={<AdminUsersPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="submissions" element={<AdminSubmissionsPage />} />
           </Route>
         </Routes>
       </main>

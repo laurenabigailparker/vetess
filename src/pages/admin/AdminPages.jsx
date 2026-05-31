@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
+
 
 const cardClass =
   "rounded-[1.5rem] border border-[#eadfca] bg-white p-6 shadow-sm";
@@ -7,7 +8,7 @@ const cardClass =
 const inputClass =
   "w-full rounded-xl border border-[#eadfca] bg-white px-4 py-3 text-sm outline-none focus:border-[#911b1d]";
 
-const redButton =
+const _redButton =
   "rounded-2xl bg-[#911b1d] px-5 py-3 text-sm font-bold text-white hover:opacity-90";
 
 const _navyButton =
@@ -67,6 +68,7 @@ function EmptyState({ title, text }) {
 function useSupabaseTable(tableName, orderColumn = "created_at") {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     let isMounted = true;
@@ -135,22 +137,18 @@ function useSupabaseTable(tableName, orderColumn = "created_at") {
     return true;
   };
 
+const deleteRow = async (id) => {
+  const { error } = await supabase.from(tableName).delete().eq("id", id);
 
-  const deleteRow = async (id) => {
-    const confirmDelete = window.confirm("Delete this item?");
-    if (!confirmDelete) return;
+  if (error) {
+    console.error(`Error deleting ${tableName}:`, error);
+    alert("Delete failed. Check console.");
+    return false;
+  }
 
-    const { error } = await supabase.from(tableName).delete().eq("id", id);
-
-    if (error) {
-      console.error(`Error deleting ${tableName}:`, error);
-      alert("Delete failed. Check console.");
-      return false;
-    }
-
-    await refreshRows();
-    return true;
-  };
+  await refreshRows();
+  return true;
+};
 
    return { rows, loading, refreshRows, insertRow, deleteRow };
 }
@@ -211,58 +209,70 @@ export function AdminDashboardPage() {
     testimonials: 0,
     successStories: 0,
     mapPins: 0,
+donations: 0,
+donors: 0,
+amountRaised: 0,
+adminUsers: 0,
   });
 
-  useEffect(() => {
-    let isMounted = true;
+ useEffect(() => {
+  let isMounted = true;
 
-    const loadDashboardData = async () => {
-      const [
-        submissionsResult,
-        jobsResult,
-        testimonialsResult,
-        storiesResult,
-        pinsResult,
-      ] = await Promise.all([
-        supabase.from("submissions").select("*").order("created_at", { ascending: false }),
-        supabase.from("job_listings").select("*"),
-        supabase.from("testimonials").select("*"),
-        supabase.from("success_stories").select("*"),
-        supabase.from("job_map_pins").select("*"),
-      ]);
+  const loadDashboardData = async () => {
+    const [
+      submissionsResult,
+      jobsResult,
+      testimonialsResult,
+      storiesResult,
+      pinsResult,
+      donationsResult,
+      usersResult,
+    ] = await Promise.all([
+      supabase.from("submissions").select("*").order("created_at", { ascending: false }),
+      supabase.from("job_listings").select("*"),
+      supabase.from("testimonials").select("*"),
+      supabase.from("success_stories").select("*"),
+      supabase.from("job_map_pins").select("*"),
+      supabase.from("donations").select("*"),
+      supabase.from("admin_users").select("*"),
+    ]);
 
-      if (!isMounted) return;
+    if (!isMounted) return;
 
-      const submissionsData = submissionsResult.data || [];
-      const jobsData = jobsResult.data || [];
-      const testimonialsData = testimonialsResult.data || [];
-      const storiesData = storiesResult.data || [];
-      const pinsData = pinsResult.data || [];
+    const submissionsData = submissionsResult.data || [];
+    const jobsData = jobsResult.data || [];
+    const testimonialsData = testimonialsResult.data || [];
+    const storiesData = storiesResult.data || [];
+    const pinsData = pinsResult.data || [];
+    const donationsData = donationsResult.data || [];
+    const usersData = usersResult.data || [];
 
-      if (submissionsResult.error) console.error("Submissions error:", submissionsResult.error);
-      if (jobsResult.error) console.error("Jobs error:", jobsResult.error);
-      if (testimonialsResult.error) console.error("Testimonials error:", testimonialsResult.error);
-      if (storiesResult.error) console.error("Stories error:", storiesResult.error);
-      if (pinsResult.error) console.error("Pins error:", pinsResult.error);
+    setSubmissions(submissionsData);
 
-      setSubmissions(submissionsData);
-      setStats({
-        submissions: submissionsData.length,
-        jobs: jobsData.length,
-        activeJobs: jobsData.filter((job) => job.status === "Active").length,
-        draftJobs: jobsData.filter((job) => job.status === "Draft").length,
-        testimonials: testimonialsData.length,
-        successStories: storiesData.length,
-        mapPins: pinsData.length,
-      });
-    };
+    setStats({
+      submissions: submissionsData.length,
+      jobs: jobsData.length,
+      activeJobs: jobsData.filter((job) => job.status === "Active").length,
+      draftJobs: jobsData.filter((job) => job.status === "Draft").length,
+      testimonials: testimonialsData.length,
+      successStories: storiesData.length,
+      mapPins: pinsData.length,
+      donations: donationsData.length,
+      donors: new Set(donationsData.map((d) => d.email || d.donor_name)).size,
+      amountRaised: donationsData.reduce(
+        (sum, d) => sum + Number(d.amount || 0),
+        0
+      ),
+      adminUsers: usersData.length,
+    });
+  };
 
-    loadDashboardData();
+  loadDashboardData();
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  return () => {
+    isMounted = false;
+  };
+}, []);
 
   const recentSubmissions = submissions.slice(0, 5);
 
@@ -279,11 +289,37 @@ export function AdminDashboardPage() {
       />
 
       <section className="grid gap-6 xl:grid-cols-4">
-        <StatCard label="Contact Submissions" value={stats.submissions} sub="From submissions table" />
-        <StatCard label="Total Job Listings" value={stats.jobs} sub="From job_listings table" />
-        <StatCard label="Active Jobs" value={stats.activeJobs} sub="Visible job listings" />
-        <StatCard label="Draft Jobs" value={stats.draftJobs} sub="Pending completion" />
+        <StatCard
+  label="Contact Submissions"
+  value={stats.submissions}
+  sub="From submissions table"
+/>
+
+<StatCard
+  label="Total Donations"
+  value={stats.donations}
+  sub="Website donations"
+/>
+
+<StatCard
+  label="Total Donors"
+  value={stats.donors}
+  sub="Unique donors"
+/>
+
+<StatCard
+  label="Amount Raised"
+  value={`$${stats.amountRaised.toLocaleString()}`}
+  sub="Donation total"
+/>
       </section>
+
+      <section className="grid gap-6 xl:grid-cols-4">
+  <StatCard label="Job Listings" value={stats.jobs} />
+  <StatCard label="Active Jobs" value={stats.activeJobs} />
+  <StatCard label="Testimonials" value={stats.testimonials} />
+  <StatCard label="Success Stories" value={stats.successStories} />
+</section>
 
       <section className="grid gap-6 xl:grid-cols-3">
         <div className={`${cardClass} xl:col-span-2`}>
@@ -352,68 +388,76 @@ export function AdminDashboardPage() {
 }
 
 export function AdminDonationsPage() {
-  const { rows, loading } = useSupabaseTable("donations");
-  const total = useMemo(
-    () => rows.reduce((sum, item) => sum + Number(item.amount || 0), 0),
-    [rows]
+  const [donations, setDonations] = useState([]);
+
+  useEffect(() => {
+    const loadDonations = async () => {
+      const { data, error } = await supabase
+        .from("donations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error loading donations:", error);
+        return;
+      }
+
+      setDonations(data || []);
+    };
+
+    loadDonations();
+  }, []);
+
+  const totalRaised = donations.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
   );
-  const monthly = rows.filter((item) => item.type === "Monthly").length;
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
       <PageTitle
         title="Donations"
-        subtitle="Live donation records from Supabase."
-        button={<button className={redButton}>Export CSV</button>}
+        subtitle="Track all donations submitted through the Vetess website."
       />
 
-      <section className="mb-8 grid gap-6 xl:grid-cols-4">
-        <StatCard label="Total Recorded" value={`$${total.toLocaleString()}`} />
-        <StatCard label="Donation Count" value={rows.length} />
-        <StatCard label="Monthly Donors" value={monthly} />
-        <StatCard label="Failed Payments" value={rows.filter((item) => item.status === "Failed").length} />
+      <section className="grid gap-6 md:grid-cols-2">
+        <StatCard label="Total Donations" value={donations.length} />
+        <StatCard
+          label="Amount Raised"
+          value={`$${totalRaised.toLocaleString()}`}
+        />
       </section>
 
-      <div className={cardClass}>
-        {loading ? (
-          <p className="text-sm text-slate-500">Loading donations...</p>
-        ) : rows.length === 0 ? (
-          <EmptyState title="No donations yet" text="Donation records will appear here when added to Supabase." />
+      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        {donations.length === 0 ? (
+          <p className="text-gray-500">No donations found.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-[#f4eddd] text-[#1f3057]">
-                <tr>
-                  {["Donor", "Email", "Amount", "Type", "Date", "Status"].map((h) => (
-                    <th className="p-4" key={h}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((item) => (
-                  <tr className="border-b last:border-0" key={item.id}>
-                    <td className="p-4 font-bold text-[#1f3057]">{item.donor_name}</td>
-                    <td className="p-4">{item.email}</td>
-                    <td className="p-4">${Number(item.amount || 0).toLocaleString()}</td>
-                    <td className="p-4">{item.type}</td>
-                    <td className="p-4">{item.created_at ? new Date(item.created_at).toLocaleDateString() : "-"}</td>
-                    <td className="p-4">
-                      <StatusBadge
-                        type={
-                          item.status === "Failed"
-                            ? "red"
-                            : item.status === "Pending"
-                            ? "yellow"
-                            : "green"
-                        }
-                      >
-                        {item.status || "Cleared"}
-                      </StatusBadge>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-4">
+            {donations.map((donation) => (
+              <div
+                key={donation.id}
+                className="rounded-xl border border-slate-200 p-4"
+              >
+                <p>
+                  <strong>Donor:</strong> {donation.donor_name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {donation.email}
+                </p>
+                <p>
+                  <strong>Amount:</strong> ${donation.amount}
+                </p>
+                <p>
+                  <strong>Type:</strong> {donation.type}
+                </p>
+                <p>
+                  <strong>Status:</strong> {donation.status}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {new Date(donation.created_at).toLocaleString()}
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -421,57 +465,103 @@ export function AdminDonationsPage() {
   );
 }
 
-export function AdminDonorsPage() {
-  const { rows, loading } = useSupabaseTable("donors");
-  const totalGiven = useMemo(
-    () => rows.reduce((sum, item) => sum + Number(item.total_given || 0), 0),
-    [rows]
-  );
-  const avgValue = rows.length ? Math.round(totalGiven / rows.length) : 0;
+ export function AdminDonorsPage() {
+  const [donors, setDonors] = useState([]);
+
+  useEffect(() => {
+    const loadDonors = async () => {
+      const { data, error } = await supabase
+        .from("donations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error loading donors:", error);
+        return;
+      }
+
+      const grouped = (data || []).reduce((acc, donation) => {
+        const key = donation.email || donation.donor_name;
+
+        if (!acc[key]) {
+          acc[key] = {
+            donor_name: donation.donor_name,
+            email: donation.email,
+            total_amount: 0,
+            donation_count: 0,
+            last_donation: donation.created_at,
+          };
+        }
+
+        acc[key].total_amount += Number(donation.amount || 0);
+        acc[key].donation_count += 1;
+
+        return acc;
+      }, {});
+
+      setDonors(Object.values(grouped));
+    };
+
+    loadDonors();
+  }, []);
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
-      <PageTitle title="Donor Database" subtitle="Live donor records from Supabase." />
+    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+      <PageTitle
+        title="Donors"
+        subtitle="Grouped donor records based on submitted donations."
+      />
 
-      <section className="mb-8 grid gap-6 xl:grid-cols-3">
-        <StatCard label="Total Donors" value={rows.length} />
-        <StatCard label="Total Given" value={`$${totalGiven.toLocaleString()}`} />
-        <StatCard label="Avg. Lifetime Value" value={`$${avgValue.toLocaleString()}`} />
+      <section className="grid gap-6 md:grid-cols-3">
+        <StatCard label="Total Donors" value={donors.length} />
+        <StatCard
+          label="Total Gifts"
+          value={donors.reduce((sum, donor) => sum + donor.donation_count, 0)}
+        />
+        <StatCard
+          label="Total Given"
+          value={`$${donors
+            .reduce((sum, donor) => sum + donor.total_amount, 0)
+            .toLocaleString()}`}
+        />
       </section>
 
-      <div className={cardClass}>
-        {loading ? (
-          <p className="text-sm text-slate-500">Loading donors...</p>
-        ) : rows.length === 0 ? (
-          <EmptyState title="No donors yet" text="Donor records will appear here when added to Supabase." />
+      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        {donors.length === 0 ? (
+          <p className="text-gray-500">No donors found.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-[#f4eddd] text-[#1f3057]">
-                <tr>
-                  {["Name", "Email", "Total Given", "Last Gift", "Type"].map((h) => (
-                    <th className="p-4" key={h}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((item) => (
-                  <tr className="border-b last:border-0" key={item.id}>
-                    <td className="p-4 font-bold text-[#1f3057]">{item.name}</td>
-                    <td className="p-4">{item.email}</td>
-                    <td className="p-4">${Number(item.total_given || 0).toLocaleString()}</td>
-                    <td className="p-4">{item.last_gift_at ? new Date(item.last_gift_at).toLocaleDateString() : "-"}</td>
-                    <td className="p-4">{item.type || "Individual"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-4">
+            {donors.map((donor) => (
+              <div
+                key={donor.email || donor.donor_name}
+                className="rounded-xl border border-slate-200 p-4"
+              >
+                <p>
+                  <strong>Donor:</strong> {donor.donor_name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {donor.email}
+                </p>
+                <p>
+                  <strong>Total Given:</strong> ${donor.total_amount}
+                </p>
+                <p>
+                  <strong>Donation Count:</strong> {donor.donation_count}
+                </p>
+                <p className="text-xs text-gray-400">
+                  Last donation:{" "}
+                  {new Date(donor.last_donation).toLocaleString()}
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </div>
     </div>
   );
 }
+
+
 
 export function AdminMapPinsPage() {
   const { rows, loading, insertRow, deleteRow } = useSupabaseTable("job_map_pins");
@@ -663,6 +753,75 @@ export function AdminJobListingsPage() {
     </div>
   );
 }
+
+export function AdminSubmissionsPage() {
+  const [submissions, setSubmissions] = useState([]);
+
+  useEffect(() => {
+    const loadSubmissions = async () => {
+      const { data, error } = await supabase
+        .from("submissions")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error loading submissions:", error);
+        return;
+      }
+
+      setSubmissions(data || []);
+    };
+
+    loadSubmissions();
+  }, []);
+
+  return (
+    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+      <PageTitle
+        title="Contact Submissions"
+        subtitle="Messages submitted through the Vetess contact form."
+      />
+
+      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        {submissions.length === 0 ? (
+          <p className="text-gray-500">No submissions found.</p>
+        ) : (
+          <div className="space-y-4">
+            {submissions.map((item) => (
+              <div
+                key={item.id}
+                className="rounded-xl border border-slate-200 p-4"
+              >
+                <div className="flex flex-col gap-2">
+                  <p>
+                    <strong>Name:</strong> {item.name}
+                  </p>
+
+                  <p>
+                    <strong>Email:</strong> {item.email}
+                  </p>
+
+                  <p>
+                    <strong>Message:</strong>
+                  </p>
+
+                  <div className="rounded-lg bg-slate-50 p-3">
+                    {item.message}
+                  </div>
+
+                  <p className="text-xs text-gray-400">
+                    {new Date(item.created_at).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 
 export function AdminTestimonialsPage() {
   const { rows, loading, insertRow, deleteRow } = useSupabaseTable("testimonials");
@@ -1023,70 +1182,314 @@ export function AdminUsersPage() {
 }
 
 export function AdminSettingsPage() {
-  const { rows, loading, insertRow, deleteRow } = useSupabaseTable("site_settings", "created_at");
+  const [settingsId, setSettingsId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
   const [form, setForm] = useState({
-    setting_key: "",
-    setting_value: "",
-    description: "",
+    setting_key: "site_config",
+    setting_value: "Vetess",
+    executive_director: "Raelyn Balfour",
+    contact_email: "rbalfour@vetess.org",
+    contact_phone: "",
+    linkedin_url: "",
+    facebook_url: "",
+    instagram_url: "",
+    youtube_url: "",
+    mission_statement:
+      "Connecting veterans, military spouses, and employers through meaningful career opportunities and workforce success.",
+    footer_text:
+      "Vetess empowers veterans and military families through career resources, employment opportunities, and community support.",
+    copyright_text: "© 2026 Vetess. All rights reserved.",
   });
 
-  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  useEffect(() => {
+    const loadSettings = async () => {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("*")
+        .eq("setting_key", "site_config")
+        .maybeSingle();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const saved = await insertRow(form);
+      if (error) {
+        console.error("Error loading settings:", error);
+        setLoading(false);
+        return;
+      }
 
-    if (saved) {
-      setForm({
-        setting_key: "",
-        setting_value: "",
-        description: "",
-      });
-    }
+      if (data) {
+        setSettingsId(data.id);
+        setForm((prev) => ({
+          ...prev,
+          ...data,
+          contact_email: data.contact_email || "rbalfour@vetess.org",
+          setting_value: data.setting_value || "Vetess",
+          executive_director: data.executive_director || "Raelyn Balfour",
+        }));
+      }
+
+      setLoading(false);
+    };
+
+    loadSettings();
+  }, []);
+
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
-      <PageTitle title="Settings" subtitle="Live site settings from Supabase." />
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setSaving(true);
 
-      <div className="mb-8 rounded-[1.5rem] border border-[#eadfca] bg-white p-6 shadow-sm">
-        <h2 className="mb-5 text-2xl font-bold text-[#1f3057]">Add Setting</h2>
-        <form onSubmit={handleSubmit} className="grid gap-4 xl:grid-cols-2">
-          <TextInput label="Setting Key" name="setting_key" value={form.setting_key} onChange={handleChange} required placeholder="site_name" />
-          <TextInput label="Setting Value" name="setting_value" value={form.setting_value} onChange={handleChange} required placeholder="Vetess" />
-          <TextArea label="Description" name="description" value={form.description} onChange={handleChange} />
-          <button className="rounded-xl bg-[#911b1d] px-6 py-4 font-bold text-white hover:opacity-90 xl:col-span-2">
-            Add Setting
-          </button>
-        </form>
+    const payload = {
+      setting_key: "site_config",
+      setting_value: form.setting_value,
+      executive_director: form.executive_director,
+      contact_email: form.contact_email,
+      contact_phone: form.contact_phone,
+      linkedin_url: form.linkedin_url,
+      facebook_url: form.facebook_url,
+      instagram_url: form.instagram_url,
+      youtube_url: form.youtube_url,
+      mission_statement: form.mission_statement,
+      footer_text: form.footer_text,
+      copyright_text: form.copyright_text,
+    };
+
+    let response;
+
+    if (settingsId) {
+      response = await supabase
+        .from("site_settings")
+        .update(payload)
+        .eq("id", settingsId);
+    } else {
+      response = await supabase
+        .from("site_settings")
+        .insert([payload])
+        .select()
+        .single();
+    }
+
+    setSaving(false);
+
+    if (response.error) {
+      console.error("Error saving settings:", response.error);
+      alert("Settings did not save. Check console.");
+      return;
+    }
+
+    if (response.data?.id) {
+      setSettingsId(response.data.id);
+    }
+
+    alert("Settings saved.");
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-[#FEFCF8] px-6 py-8">
+        <PageTitle title="Settings" subtitle="Loading site settings..." />
       </div>
+    );
+  }
 
-      <div className={cardClass}>
-        <h2 className="mb-5 text-xl font-bold text-[#1f3057]">Current Settings</h2>
+  return (
+    <div className="min-h-screen bg-[#FEFCF8] px-6 py-8">
+      <PageTitle
+        title="Settings"
+        subtitle="Manage Vetess organization info, public contact details, footer content, and social links."
+      />
 
-        {loading ? (
-          <p className="text-sm text-slate-500">Loading settings...</p>
-        ) : rows.length === 0 ? (
-          <EmptyState title="No settings yet" text="Add site settings above to populate this section." />
-        ) : (
-          <div className="space-y-4">
-            {rows.map((setting) => (
-              <div key={setting.id} className="flex flex-col justify-between gap-4 rounded-2xl border border-[#eadfca] bg-[#FEFCF8] p-5 md:flex-row md:items-center">
-                <div>
-                  <p className="font-bold text-[#1f3057]">{setting.setting_key}</p>
-                  <p className="text-sm text-slate-600">{setting.setting_value}</p>
-                  {setting.description && (
-                    <p className="mt-1 text-xs text-slate-400">{setting.description}</p>
-                  )}
-                </div>
-                <button onClick={() => deleteRow(setting.id)} className="text-sm font-bold text-[#911b1d]">
-                  Delete
-                </button>
-              </div>
+      <form onSubmit={handleSave} className="mx-auto max-w-5xl space-y-8">
+        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
+            General Site Info
+          </p>
+
+          <div className="space-y-7">
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Organization Name
+              </span>
+              <input
+                name="setting_value"
+                value={form.setting_value}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Executive Director
+              </span>
+              <input
+                name="executive_director"
+                value={form.executive_director}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Contact Email
+              </span>
+              <input
+                name="contact_email"
+                value={form.contact_email}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Contact Phone
+              </span>
+              <input
+                name="contact_phone"
+                value={form.contact_phone}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
+            Mission & Footer
+          </p>
+
+          <div className="space-y-7">
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Mission Statement
+              </span>
+              <textarea
+                name="mission_statement"
+                value={form.mission_statement}
+                onChange={handleChange}
+                className="min-h-36 w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Footer Text
+              </span>
+              <textarea
+                name="footer_text"
+                value={form.footer_text}
+                onChange={handleChange}
+                className="min-h-28 w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                Copyright Text
+              </span>
+              <input
+                name="copyright_text"
+                value={form.copyright_text}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
+            Social Links
+          </p>
+
+          <div className="space-y-7">
+            {[
+              ["LinkedIn URL", "linkedin_url"],
+              ["Facebook URL", "facebook_url"],
+              ["Instagram URL", "instagram_url"],
+              ["YouTube URL", "youtube_url"],
+            ].map(([label, name]) => (
+              <label className="block" key={name}>
+                <span className="mb-3 block text-xs uppercase tracking-[0.32em] text-slate-500">
+                  {label}
+                </span>
+                <input
+                  name={name}
+                  value={form[name] || ""}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+                />
+              </label>
             ))}
           </div>
-        )}
-      </div>
+        </section>
+
+        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
+            Preview
+          </p>
+
+          <p className="text-xs uppercase tracking-[0.32em] text-slate-500">
+            Organization
+          </p>
+
+          <h2 className="mt-4 text-3xl font-black text-[#1f3057]">
+            {form.setting_value || "Vetess"}
+          </h2>
+
+          <p className="mt-6 max-w-3xl italic leading-7 text-slate-600">
+            {form.mission_statement ||
+              "Mission statement preview will appear here."}
+          </p>
+
+          <div className="mt-6 space-y-1 text-sm text-slate-600">
+            <p>
+              <span className="font-bold text-[#1f3057]">Executive Director:</span>{" "}
+              {form.executive_director || "Raelyn Balfour"}
+            </p>
+
+            <p>
+              <span className="font-bold text-[#1f3057]">Email:</span>{" "}
+              {form.contact_email || "rbalfour@vetess.org"}
+            </p>
+
+            {form.contact_phone && (
+              <p>
+                <span className="font-bold text-[#1f3057]">Phone:</span>{" "}
+                {form.contact_phone}
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
+            Publish
+          </p>
+
+          <p className="mb-8 text-sm leading-7 text-slate-500">
+            These settings can power footer text, contact email, organization
+            information, and social links across the public site.
+          </p>
+
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full rounded-xl bg-[#911b1d] px-8 py-5 text-xs font-black uppercase tracking-[0.32em] text-white transition hover:opacity-90 disabled:opacity-60"
+          >
+            {saving ? "Saving..." : "Save Settings"}
+          </button>
+        </section>
+      </form>
     </div>
   );
 }

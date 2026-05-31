@@ -136,21 +136,29 @@ useEffect(() => {
                 </NavLink>
               </div>
 
-              {/* backend section */}
-              <div>
-                <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
-                  Backend
-                </p>
+           
 
-                <div className="rounded-3xl bg-white/5 px-4 py-3 text-slate-200">
-                  <p className="text-xs uppercase tracking-[0.2em] text-[gold]">
-                    Supabase
-                  </p>
-                  <p className="mt-1 text-sm">
-                    {submissionCount} test submissions
-                  </p>
-                </div>
-              </div>
+
+
+
+<NavLink
+  to="submissions"
+  className={({ isActive }) =>
+    `mb-4 flex items-center justify-between rounded-3xl px-4 py-3 ${
+      isActive
+        ? "bg-[#1b315e] text-white"
+        : "text-slate-300 hover:bg-white/5"
+    }`
+  }
+>
+  <span>Contact Submissions</span>
+
+  <span className="rounded-full bg-[#911b1d] px-2 py-0.5 text-[10px] font-semibold text-white">
+    {submissionCount}
+  </span>
+</NavLink>
+
+{/* DONATIONS */}
 
               <div>
                 <p className="px-3 text-[10px] uppercase tracking-[0.32em] text-[gold] mb-3">
@@ -167,6 +175,8 @@ useEffect(() => {
                           : "text-slate-200 hover:bg-white/5"
                       }`
                     }
+                  
+
                   >
                     <span>Donations</span>
                     <span className="rounded-full bg-[#911b1d] px-2 py-0.5 text-[10px] font-semibold text-white">

@@ -58,13 +58,13 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 xl:flex">
-            <button
-              type="button"
-              onClick={() => navigate('/admin/login')}
-              className="rounded-md border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              Sign In
-            </button>
+           <Link
+  to="/admin/login"
+  onClick={closeMenu}
+  className="w-full rounded-md border border-gold-500 px-4 py-3 text-center text-base font-semibold text-gold-500 transition hover:bg-gold-500 hover:text-navy-700"
+>
+  Admin Portal
+</Link>
 
             <button
               type="button"
@@ -158,11 +158,12 @@ export default function Navbar() {
               onClose={() => setIsModalOpen(false)}
               />
             </div>
-            <Link
+          <Link
   to="/admin/login"
-  className="rounded-full border border-[#1f3057] px-4 py-2 text-sm font-semibold text-[#1f3057]"
+  onClick={closeMenu}
+  className="mt-4 w-full rounded-md border border-gold-500 px-4 py-3 text-center text-base font-semibold text-gold-500 transition hover:bg-gold-500 hover:text-navy-700"
 >
-  Admin
+  Admin Portal
 </Link>
           </div>
         </div>
