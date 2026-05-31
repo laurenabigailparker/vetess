@@ -9,6 +9,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -69,18 +70,29 @@ export default function AdminLogin() {
               />
             </div>
 
-            <div className="mb-6">
-              <label className="mb-3 block text-sm font-bold text-gray-800">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
-                className="w-full rounded-2xl border-[1.5px] border-[#ECC94B] bg-white px-5 py-4 text-gray-700 focus:border-[#D4A91E] focus:outline-none"
-              />
-            </div>
+          <div className="mb-6">
+  <label className="mb-3 block text-sm font-bold text-gray-800">
+    Password
+  </label>
+
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="Enter admin password"
+      className="w-full rounded-2xl border-[1.5px] border-[#ECC94B] bg-white px-5 py-4 pr-20 text-gray-700 focus:border-[#D4A91E] focus:outline-none"
+    />
+
+    <button
+      type="button"
+      onClick={() => setShowPassword((prev) => !prev)}
+      className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold uppercase tracking-[0.18em] text-[#911b1d]"
+    >
+      {showPassword ? "Hide" : "Show"}
+    </button>
+  </div>
+</div>
 
             {errorMessage && (
               <p className="mb-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
