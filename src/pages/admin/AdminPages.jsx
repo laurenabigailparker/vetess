@@ -3,10 +3,10 @@ import { supabase } from "../../lib/supabase";
 
 
 const cardClass =
-  "rounded-[1.5rem] border border-[#eadfca] bg-white p-6 shadow-sm";
+  "w-full max-w-full overflow-hidden rounded-[1.5rem] border border-[#eadfca] bg-white p-4 shadow-sm sm:p-6";
 
 const inputClass =
-  "w-full rounded-xl border border-[#eadfca] bg-white px-4 py-3 text-sm outline-none focus:border-[#911b1d]";
+  "w-full max-w-full rounded-xl border border-[#eadfca] bg-white px-4 py-3 text-sm outline-none focus:border-[#911b1d]";
 
 const _redButton =
   "rounded-2xl bg-[#911b1d] px-5 py-3 text-sm font-bold text-white hover:opacity-90";
@@ -277,7 +277,7 @@ adminUsers: 0,
   const recentSubmissions = submissions.slice(0, 5);
 
   return (
-    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+    <div className="space-y-8 bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle
         title="Dashboard Overview"
         subtitle="Live admin overview powered by Supabase. No fake dashboard values."
@@ -414,7 +414,7 @@ export function AdminDonationsPage() {
   );
 
   return (
-    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+    <div className="space-y-8 bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle
         title="Donations"
         subtitle="Track all donations submitted through the Vetess website."
@@ -506,7 +506,7 @@ export function AdminDonationsPage() {
   }, []);
 
   return (
-    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+    <div className="space-y-8 bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle
         title="Donors"
         subtitle="Grouped donor records based on submitted donations."
@@ -598,7 +598,7 @@ export function AdminMapPinsPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Job Map Pins" subtitle="Live map pin data from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -683,7 +683,7 @@ export function AdminJobListingsPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Job Listings" subtitle="Live job board records from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -776,7 +776,7 @@ export function AdminSubmissionsPage() {
   }, []);
 
   return (
-    <div className="space-y-8 bg-[#FEFCF8] px-6 py-8">
+    <div className="space-y-8 bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle
         title="Contact Submissions"
         subtitle="Messages submitted through the Vetess contact form."
@@ -855,7 +855,7 @@ export function AdminTestimonialsPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Testimonials" subtitle="Live testimonial content from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -951,7 +951,7 @@ export function AdminSuccessStoriesPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Success Stories" subtitle="Live veteran success stories from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -1029,7 +1029,7 @@ export function AdminPagesContentPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Pages & Content" subtitle="Live page metadata and content notes from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -1117,7 +1117,7 @@ export function AdminUsersPage() {
   };
 
   return (
-    <div className="bg-[#FEFCF8] px-6 py-8">
+    <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
       <PageTitle title="Admin Users" subtitle="Live admin user records from Supabase." />
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
@@ -1292,7 +1292,7 @@ export function AdminSettingsPage() {
 
   if (loading) {
     return (
-      <div className="bg-[#FEFCF8] px-6 py-8">
+      <div className="bg-[#FEFCF8] px-0 py-6 sm:px-4 md:px-6 md:py-8">
         <PageTitle title="Settings" subtitle="Loading site settings..." />
       </div>
     );
@@ -1305,8 +1305,8 @@ export function AdminSettingsPage() {
         subtitle="Manage Vetess organization info, public contact details, footer content, and social links."
       />
 
-      <form onSubmit={handleSave} className="mx-auto max-w-5xl space-y-8">
-        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+     <form onSubmit={handleSave} className="mx-auto w-full max-w-5xl space-y-8">
+        <section className="w-full rounded-[1.5rem] border border-[#eadfca] bg-white p-5 shadow-sm sm:p-8">
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
             General Site Info
           </p>
@@ -1362,7 +1362,7 @@ export function AdminSettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+        <section className="w-full rounded-[1.5rem] border border-[#eadfca] bg-white p-5 shadow-sm sm:p-8">
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
             Mission & Footer
           </p>
@@ -1376,7 +1376,7 @@ export function AdminSettingsPage() {
                 name="mission_statement"
                 value={form.mission_statement}
                 onChange={handleChange}
-                className="min-h-36 w-full rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-6 py-5 text-[#1f3057] outline-none focus:border-[#911b1d]"
+                className="min-h-36 w-full resize-y rounded-xl border border-[#eadfca] bg-[#FEFCF8] px-4 py-4 text-sm leading-6 text-[#1f3057] outline-none focus:border-[#911b1d] sm:px-6 sm:py-5 sm:text-base"
               />
             </label>
 
@@ -1406,7 +1406,7 @@ export function AdminSettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+        <section className="w-full rounded-[1.5rem] border border-[#eadfca] bg-white p-5 shadow-sm sm:p-8">
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
             Social Links
           </p>
@@ -1433,7 +1433,7 @@ export function AdminSettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+        <section className="w-full rounded-[1.5rem] border border-[#eadfca] bg-white p-5 shadow-sm sm:p-8">
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
             Preview
           </p>
@@ -1471,7 +1471,7 @@ export function AdminSettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-[#eadfca] bg-white p-8 shadow-sm">
+        <section className="w-full rounded-[1.5rem] border border-[#eadfca] bg-white p-5 shadow-sm sm:p-8">
           <p className="mb-8 text-xs font-semibold uppercase tracking-[0.35em] text-[#911b1d]">
             Publish
           </p>
