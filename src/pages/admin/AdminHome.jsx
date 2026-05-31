@@ -88,9 +88,7 @@ useEffect(() => {
         </div>
 
      <div className="flex items-center gap-4">
-  <button className="hidden rounded-2xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:bg-white/10 sm:inline-flex">
-    🔔
-  </button>
+ 
 
   <button
     onClick={() => navigate("/")}
