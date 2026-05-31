@@ -112,28 +112,28 @@ export default function Navbar() {
 
               return (
                 <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={closeMenu}
-                  className={`rounded-md px-4 py-4 text-lg font-medium transition ${
-                    isActive
-                      ? "bg-white/10 text-white"
-                      : "text-white hover:bg-white/10"
-                  }`}
-                >
-                  {link.label}
-                </Link>
+  key={link.path}
+  to={link.path}
+  onClick={closeMenu}
+  className={`rounded-md px-4 py-4 text-lg font-medium transition ${
+    isActive ? "bg-white/10" : "hover:bg-white/10"
+  }`}
+  style={{ color: "#ffffff" }}
+>
+  {link.label}
+</Link>
               );
             })}
 
             <div className="mt-6 flex flex-col gap-3">
-              <Link
-                to="/admin/login"
-                onClick={closeMenu}
-                className="w-full rounded-md border border-gold-500 px-4 py-3 text-center text-base font-semibold text-gold-500 transition hover:bg-gold-500 hover:text-navy-700"
-              >
-                Admin Portal
-              </Link>
+            <Link
+  to="/admin/login"
+  onClick={closeMenu}
+  className="w-full rounded-md border border-gold-500 px-4 py-3 text-center text-base font-semibold transition hover:bg-gold-500 hover:text-navy-700"
+  style={{ color: "#f1c40f" }}
+>
+  Admin Portal
+</Link>
 
               <button
                 type="button"
